@@ -15,49 +15,36 @@
 # ---
 
 # %%
+# Import libraries
+import cci_nepal
+from cci_nepal.getters.data_scoping import get_sample_data as gsd
+from cci_nepal.pipeline.data_scoping import mis_sample_pipeline as msp
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-import cci_nepal
-import nltk
 import re
-import logging
 
 # %%
-# nltk.download("words")
-
-# %%
+# Set directory
 project_directory = cci_nepal.PROJECT_DIR
-logging.info(project_directory)
 
 # %%
-db = pd.read_excel(
+db = gsd.read_excel_file(
     f"{project_directory}/inputs/data/wp2_data_scoping/PDM_ Datasheet.xlsx"
 )
 
 # %%
-db.shape
+db.shape  # Shape of dataset
 
 # %%
+# Drop survey intro column
 db.drop(db.columns[2], axis=1, inplace=True)
 
+# %%
+db = msp.clean_df_columns(db)  # Calling function
 
 # %%
-def clean_df_columns(df):
-    df.columns = df.columns.str.replace("[^a-zA-Z0-9\-\s]+", "", regex=True)
-    df.columns = df.columns.str.lstrip()
-
-
-# %%
-clean_df_columns(db)
-
-# %%
-db = db.replace("[^a-zA-Z0-9\-\s]+", "", regex=True)
-
-# %%
-db.head(5)
-
-# %%
+# Create table to show percent missing across columns
 percent_missing = db.isnull().sum() * 100 / len(db)
 missing_value_df = pd.DataFrame(
     {"column_name": db.columns, "percent_missing": percent_missing}
@@ -65,43 +52,53 @@ missing_value_df = pd.DataFrame(
 missing_value_df.sort_values("percent_missing", inplace=True)
 
 # %%
+# Plot figure
+fig = plt.figure()
 missing_value_df["percent_missing"].plot(kind="bar")
+fig.suptitle("Percent missing across columns", fontsize=14)
+plt.xlabel("Columns", fontsize=12)
+plt.ylabel("Percentage", fontsize=12)
 plt.xticks([])
+plt.savefig(
+    f"{project_directory}/outputs/figures/data_scoping/mis_sample/percent_missing_all_columns.png"
+)
 
 # %%
-plt.figure(figsize=(15, 10))
+# Plot figure
+fig = plt.figure(figsize=(15, 10))
 missing_value_df["percent_missing"].tail(60).plot(kind="bar")
+fig.suptitle("Percent missing - largest 60", fontsize=14)
+plt.xlabel("Columns", fontsize=12)
+plt.ylabel("Percentage", fontsize=12)
 
 # %%
-# db.to_excel('clean-temp.xlsx', index=False)
-
-# %%
+# Clean ethnicity column
 db["Ethnicity of the informant"] = (
     db["Ethnicity of the informant"].str.replace("\d+", "").copy()
 )
 
 # %%
+# Plot figure
 fig = plt.figure()
 db["Ethnicity of the informant"].value_counts().sort_values().plot(kind="barh")
 fig.suptitle("Ethnicity of the informant", fontsize=14)
 plt.xlabel("Frequency", fontsize=12)
 plt.ylabel("Ethnicity", fontsize=12)
 
-# %%
-nfri_items = {}
-nfri_df = db.iloc[:, 52:69]
-nfri_df.columns = nfri_df.columns.str.replace(
-    "What did your family get from Nepal Red Cross Society after the flood and landslide",
-    "",
+plt.savefig(
+    f"{project_directory}/outputs/figures/data_scoping/mis_sample/ethnicity_of_informant.png"
 )
-nfri_df.columns = nfri_df.columns.str.strip()
 
 # %%
-for col in nfri_df.columns:
-    nfri_df[col] = nfri_df[col].fillna(0)
-    nfri_items[col] = sum(nfri_df[col])
+nfri_items = msp.group_counts(
+    52,
+    69,
+    "What did your family get from Nepal Red Cross Society after the flood and landslide",
+    db,
+)
 
 # %%
+# Plot figure
 fig = plt.figure()
 
 plt.bar(nfri_items.keys(), nfri_items.values())
@@ -118,26 +115,26 @@ plt.ylabel("Frequency", fontsize=12)
 plt.show()
 
 # %%
+# Plot figure
 fig = plt.figure(figsize=(10, 15))
 db.iloc[:, 69].value_counts().sort_values().plot(kind="barh")
 fig.suptitle("Other relief items specified", fontsize=14)
 plt.xlabel("Frequency", fontsize=12)
 plt.ylabel("Items", fontsize=12)
 
-# %%
-cash_relief = {}
-cr_df = db.iloc[:, 90:99]
-cr_df.columns = cr_df.columns.str.replace(
-    "For what did you spend the money you received from the Red Cross", ""
+plt.tight_layout()
+
+plt.savefig(
+    f"{project_directory}/outputs/figures/data_scoping/mis_sample/other_relief_items.png"
 )
-cr_df.columns = cr_df.columns.str.strip()
 
 # %%
-for col in cr_df.columns:
-    cr_df[col] = cr_df[col].fillna(0)
-    cash_relief[col] = sum(cr_df[col])
+cash_relief = msp.group_counts(
+    90, 99, "For what did you spend the money you received from the Red Cross", db
+)
 
 # %%
+# Plot figure
 fig = plt.figure()
 
 plt.bar(cash_relief.keys(), cash_relief.values())
@@ -147,9 +144,14 @@ fig.suptitle("How cash relief was spent", fontsize=14)
 plt.xlabel("Spending activity", fontsize=12)
 plt.ylabel("Frequency", fontsize=12)
 
+plt.savefig(
+    f"{project_directory}/outputs/figures/data_scoping/mis_sample/how_relief_spent.png"
+)
+
 plt.show()
 
 # %%
+# Plot figure
 fig = plt.figure()
 db[
     "Did the cash relief provided by the Red Cross met your immediate needs"
@@ -162,29 +164,16 @@ fig.suptitle(
 plt.xlabel("Frequency", fontsize=12)
 plt.ylabel("Answer", fontsize=12)
 
+plt.savefig(
+    f"{project_directory}/outputs/figures/data_scoping/mis_sample/did_relief_meet_needs.png"
+)
+
 plt.show()
 
 
 # %%
-db[
-    "Has the relief materials you received caused jealousy in the community"
-].value_counts()
-
-# %%
-db[
-    "What do you suggest should be included in the relief of Nepal Red Cross in the future"
-]
-
-# %%
-db.shape
-
-# %%
-relief_sugg = {}
-rs_df = db.iloc[:, 132:135]
-# rs_df.columns = rs_df.columns.str.replace('For what did you spend the money you received from the Red Cross', '')
-# rs_df.columns = rs_df.columns.str.strip()
-
-# %%
-rs_df.head(1)
-
-# %%
+# Save cleaned file
+db.to_excel(
+    f"{project_directory}/outputs/data/data_scoping/mis_sample_cleaned.xlsx",
+    index=False,
+)

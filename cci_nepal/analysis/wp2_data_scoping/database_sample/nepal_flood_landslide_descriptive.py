@@ -10,7 +10,7 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.11.4
 #   kernelspec:
-#     display_name: Python 3
+#     display_name: Python 3 (ipykernel)
 #     language: python
 #     name: python3
 # ---
@@ -20,6 +20,8 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import cci_nepal
+from cci_nepal.getters.data_scoping import get_sample_data as gsd
+from cci_nepal.pipeline.data_scoping import mis_sample_pipeline as msp
 import logging
 import re
 
@@ -36,32 +38,19 @@ logging.info(project_dir)
 
 # %%
 # read sample nepal flood data for 2020
-data_df = pd.read_excel(f"{project_dir}/inputs/data/PDM_ Datasheet.xlsx")
+data_df = gsd.read_excel_file(f"{project_dir}/inputs/data/PDM_ Datasheet.xlsx")
 
 # %%
 # data on nepal's population by district in 2011 -could be explored to gain insight about the population distribution
 # of the affected areas.
-population_df = pd.read_csv(f"{project_dir}/inputs/data/data.csv")
+population_df = gsd.read_csv_file(f"{project_dir}/inputs/data/data.csv")
 
 # %%
 # extract population only
 population = population_df[population_df["Category "] == "Population"]
 
 # %%
-# removing nepali from responses
-data_df = data_df.replace("[^a-zA-Z0-9\-\s]+", "", regex=True)
-
-
-# %%
-def clean_df_columns(df):
-    df.columns = df.columns.str.replace("[^a-zA-Z0-9\-\s]+", "", regex=True)
-    df.columns = df.columns.str.lstrip()
-    logging.info(df.columns)
-    # return df
-
-
-# %%
-clean_df_columns(data_df)
+data_df = msp.clean_df_columns(data_df)
 
 
 # %%
@@ -100,11 +89,8 @@ missing_value_df["percent_missing"].plot(kind="bar")
 plt.xticks([])
 
 # %%
-IMAGE_DIR = str(project_dir) + "/outputs/figures/nepal_descriptive"
+IMAGE_DIR = str(project_dir) + "/outputs/figures/data_scoping/mis_sample"
 logging.info(IMAGE_DIR)
-
-# %%
-cci_nepal.PROJECT_DIR
 
 # %%
 # missing values greater than 82%
@@ -318,9 +304,7 @@ plt.title("Why did you choose to receive relief supplies", fontsize=20)
 data_df["Why did you choose to receive relief supplies"].value_counts().plot(
     kind="barh"
 )
-plt.savefig(
-    f"{project_dir}/outputs/figures/nepal_descriptive/motive_for_receiving_id.png"
-)
+plt.savefig(f"{IMAGE_DIR}/motive_for_receiving_id.png")
 
 # %%
 data_df["Is the informant the person receiving the relief materials"].value_counts()
@@ -333,9 +317,7 @@ plt.title("Why did you choose to receive relief supplies", fontsize=20)
 data_df["Why did you choose to receive relief supplies"][
     data_df["Gender of the informant"] == "  male"
 ].value_counts().plot(kind="barh")
-plt.savefig(
-    f"{project_dir}/outputs/figures/nepal_descriptive/motive_for_receiving_id_male.png"
-)
+plt.savefig(f"{IMAGE_DIR}/motive_for_receiving_id_male.png")
 
 # %%
 # motive for receiving relief by gender -male

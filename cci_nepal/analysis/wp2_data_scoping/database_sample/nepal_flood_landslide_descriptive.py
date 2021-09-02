@@ -100,13 +100,18 @@ missing_value_df["percent_missing"].plot(kind="bar")
 plt.xticks([])
 
 # %%
+IMAGE_DIR = str(project_dir) + "/outputs/figures/nepal_descriptive"
+logging.info(IMAGE_DIR)
+
+# %%
+cci_nepal.PROJECT_DIR
+
+# %%
 # missing values greater than 82%
 plt.figure(figsize=(15, 10))
 missing_value_df["percent_missing"].tail(45).plot(kind="bar")
 plt.title("columns with missing values > 82%", fontsize=18)
-plt.savefig(
-    f"{project_dir}/outputs/figures/nepal_descriptive/missing_values_greater80.png"
-)
+plt.savefig(f"{IMAGE_DIR}/missing_values_greater80.png")
 plt.show()
 
 # %%
@@ -116,9 +121,7 @@ plt.tick_params(axis="both", labelsize=16)
 missing_value_df["percent_missing"].head(25)[6:].plot(kind="barh")
 plt.title("columns with missing values <15%", fontsize=20)
 plt.tight_layout()
-plt.savefig(
-    f"{project_dir}/outputs/figures/nepal_descriptive/missing_values_less15.png"
-)
+plt.savefig(f"{IMAGE_DIR}/missing_values_less15.png")
 plt.show()
 
 # %%
@@ -126,9 +129,7 @@ plt.figure(figsize=(15, 10))
 missing_value_df["percent_missing"].plot(kind="hist")
 plt.title("Distribution of columns with missing values", fontsize=20)
 plt.tight_layout()
-plt.savefig(
-    f"{project_dir}/outputs/figures/nepal_descriptive/missing_values_greater80b.png"
-)
+plt.savefig(f"{IMAGE_DIR}/missing_values_greater80b.png")
 plt.show()
 
 # %%
@@ -163,9 +164,7 @@ ax.bar(labels, women_means, width, bottom=men_means, label="Female")
 ax.set_ylabel("Number of beneficiaries")
 ax.set_title("Beneficiaries by age group and gender")
 ax.legend()
-plt.savefig(
-    f"{project_dir}/outputs/figures/nepal_descriptive/beneficiaries_by_age_groups.png"
-)
+plt.savefig(f"{IMAGE_DIR}/beneficiaries_by_age_groups.png")
 plt.show()
 
 # %%
@@ -189,7 +188,7 @@ data_df[
 ].value_counts().sort_values().plot(kind="barh")
 plt.title("How were you notified about the relief delivery date")
 plt.xlabel("Frequency")
-plt.savefig(f"{project_dir}/outputs/figures/nepal_descriptive/notification_means.png")
+plt.savefig(f"{IMAGE_DIR}/notification_means.png")
 
 
 # %%
@@ -265,9 +264,6 @@ for name in data_df["District name"].unique():
         print(population.Value[population.District == name])
 
 # %%
-district_population
-
-# %%
 district_counts[:14]
 
 # %%
@@ -298,9 +294,7 @@ fig2, ax2 = plt.subplots()
 ax2.pie(counts, labels=names, autopct="%1.1f%%", shadow=True, startangle=90)
 ax2.axis("equal")  # Equal aspect ratio ensures that pie is drawn as a circle.
 plt.tight_layout()
-plt.savefig(
-    f"{project_dir}/outputs/figures/nepal_descriptive/district_representation.png"
-)
+plt.savefig(f"{IMAGE_DIR}/district_representation.png")
 plt.title("Representation of districts")
 plt.show()
 
@@ -356,33 +350,6 @@ data_df["Why did you choose to receive relief supplies"][
 ].value_counts()
 
 # %%
-# use stacked bar to represent the motives by gender. Figures are manually recorded from above to ensure matching classes
-labels1 = [
-    "vulnerable family",
-    "dont know",
-    "because of the family crisis",
-    "others",
-    "Being displaced",
-    "because the house was partially damaged",
-    "because the house was completely damaged",
-]
-male_num = [1, 2, 6, 22, 41, 67, 81]
-female_num = [3, 1, 3, 5, 16, 33, 42]
-width = 0.35  # the width of the bars
-fig, ax2 = plt.subplots()
-plt.tick_params(axis="both", labelsize=16)
-plt.figure(figsize=(15, 15))
-ax2.barh(labels1, male_num, width, label="Male")
-ax2.barh(labels1, female_num, width, label="Female")
-ax2.set_xlabel("Number of beneficiaries")
-ax2.set_title("Motive for receiving relief by gender", fontsize=20)
-ax2.legend()
-plt.savefig(
-    f"{project_dir}/outputs/figures/nepal_descriptive/beneficiaries_by_gender.png"
-)
-plt.show()
-
-# %%
 labels1 = [
     "vulnerable family",
     "dont know",
@@ -436,6 +403,11 @@ for n in df_rel:
         )
 
 # %%
+relief_df_gender.plot.barh(width=0.75, figsize=(15, 10), fontsize=16)
+plt.title("Motive for receiving relief by gender", fontsize=20)
+plt.savefig(f"{IMAGE_DIR}/motive_for_receiving_relief_by_gender_side_stacke.png")
+
+# %%
 # why receive relief package by gender
 plt.figure(figsize=(15, 10))
 plt.tight_layout()
@@ -474,18 +446,6 @@ for col in cash_spending_df.loc[
 cash_spending_df.loc[
     :, "For what did you spend the money you received from the Red Cross":
 ].columns[1:11]
-
-# %%
-# cash spending by informant
-plt.figure(figsize=(15, 10))
-plt.xlabel("Frequency", fontsize=16)
-plt.ylabel("Spending activity", fontsize=16)
-plt.title("Cash spending", fontsize=20)
-cash_spending_df[
-    cash_spending_df.loc[
-        :, "For what did you spend the money you received from the Red Cross":
-    ].columns[1:10]
-].sum(axis=0).sort_values().plot(kind="barh")
 
 # %%
 plt.figure(figsize=(15, 10))
@@ -545,8 +505,9 @@ cash_spent_df_gender = pd.DataFrame(
     {"male": cash_spent_by_gender_male, "female": cash_spent_by_gender_female},
     index=cash_spent_by_gender_labels,
 )
-cash_spent_df_gender.plot.barh(stacked=True, width=0.75)
+cash_spent_df_gender.plot.barh(width=0.75, figsize=(15, 10), fontsize=16)
 plt.title("Cash spent by gender", fontsize=20)
+plt.savefig(f"{IMAGE_DIR}/cash_spent_by_gender.png")
 
 # %%
 cash_spent_by_gender_labels = [
@@ -651,6 +612,53 @@ cash_spending_df[cash_spending_columns][
 ].sum(axis=0).sort_values().plot(kind="barh")
 
 # %%
+# plotting all three using a stacked bar chart
+family_with_children_under18 = [0, 2, 12, 12, 27, 34, 46, 77, 135]
+family_without_children_but_with_elderly = [1, 1, 7, 1, 11, 13, 22, 28, 52]
+family_without_children_under18 = [1, 1, 2, 1, 5, 5, 7, 6, 19]
+
+cash_spent_children_not_df = pd.DataFrame(
+    {
+        "Family with Children age<18": family_with_children_under18,
+        "Family with age 60+ but no under 18": family_without_children_but_with_elderly,
+        "Family without age <18": family_without_children_under18,
+    },
+    index=cash_spent_by_gender_labels,
+)
+cash_spent_children_not_df.plot.barh(width=0.75, figsize=(15, 10), fontsize=18)
+plt.title(
+    "Cash spent by families with children under 18, no under 18 & no under 18 but with at least age 60+",
+    fontsize=24,
+)
+
+
+# %%
+cash_spending_df[cash_spending_columns][
+    (cash_spending_df.male0_5 == 0)
+    & (cash_spending_df.female0_5 == 0)
+    & (cash_spending_df.male6_17 == 0)
+    & (cash_spending_df.female6_17 == 0)
+].sum(axis=0).sort_values()
+
+# %%
+# combining the summary to plot a stacked bar graph
+# cash spending for families with children less than 18 years.
+cash_spending_df[cash_spending_columns][
+    (cash_spending_df.male0_5 > 0)
+    | (cash_spending_df.female0_5 > 0)
+    | (cash_spending_df.male6_17 > 0)
+    | (cash_spending_df.female6_17 > 0)
+].sum(axis=0).sort_values()
+
+# %%
+cash_spending_df[cash_spending_columns][
+    (cash_spending_df.male0_5 > 0)
+    | (cash_spending_df.female0_5 > 0)
+    | (cash_spending_df.male6_17 > 0)
+    | (cash_spending_df.female6_17 > 0)
+].sum(axis=0).sort_values()
+
+# %%
 cash_spending_df[data_df.columns[22:30]]
 
 # %%
@@ -751,6 +759,38 @@ data_df[
 data_df[
     "What do you suggest should be included in the relief of Nepal Red Cross in the future"
 ][data_df["Gender of the informant"] == " female"].value_counts()
+
+# %%
+suggestion_df = data_df[
+    [
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future",
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future  Cash",
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future     food and non-food materials",
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future   others",
+        "otherspelase specify",
+    ]
+]
+suggestion_df.rename(
+    columns={
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future  Cash": "Cash",
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future     food and non-food materials": "food and non-food materials",
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future   others": "others",
+    },
+    inplace=True,
+)
+
+# %%
+suggestion_df[
+    ["Cash", "food and non-food materials", "others"]
+].sum().sort_values().plot(kind="barh", figsize=(15, 10), fontsize=16)
+plt.title("Suggested Items to be added in future packages", fontsize=20)
+plt.show()
+
+# %%
+data_df.loc[
+    :,
+    "What do you suggest should be included in the relief of Nepal Red Cross in the future":,
+].columns
 
 # %%
 index_suggestions = [
@@ -946,19 +986,12 @@ age_below30 = [0, 0, 2, 2, 4, 4, 5, 8, 11, 19, 21, 23, 35, 35, 38, 39]
 age30_59 = [1, 1, 4, 1, 2, 8, 8, 20, 21, 36, 45, 54, 69, 77, 83, 96]
 age60_above = [0, 0, 0, 0, 1, 3, 0, 1, 2, 8, 2, 5, 7, 4, 10, 12]
 width = 0.75  # the width of the bars: can also be len(x) sequence
-fig, ax2 = plt.subplots()
-plt.tick_params(axis="both", labelsize=16)
-plt.figure(figsize=(30, 20))
-ax2.barh(packages_recieved_by_age_groups, age_below30, width, label="Age below 30")
-ax2.barh(packages_recieved_by_age_groups, age30_59, width, label="Age 30 to 59")
-ax2.barh(packages_recieved_by_age_groups, age60_above, width, label="Age 60 plus")
-ax2.set_xlabel("Frequency")
-ax2.set_title("Package relief received by age groups", fontsize=20)
-ax2.legend()
-plt.savefig(
-    f"{project_dir}/outputs/figures/nepal_descriptive/relief_received_by_age_groups.png"
+packages_received_by_age_groups_df = pd.DataFrame(
+    {"Age below 30": age_below30, "Age 30 to 59": age30_59, "Age 60 plus": age60_above},
+    index=packages_recieved_by_age_groups,
 )
-plt.show()
+packages_received_by_age_groups_df.plot.barh(width=0.75, figsize=(15, 10), fontsize=16)
+plt.title("Items received by age brackets", fontsize=20)
 
 # %%
 data_df[column_dic.values()][

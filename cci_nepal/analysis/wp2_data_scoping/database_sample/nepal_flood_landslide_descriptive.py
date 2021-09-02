@@ -436,6 +436,10 @@ for n in df_rel:
         )
 
 # %%
+relief_df_gender.plot.barh(width=0.75, figsize=(15, 10), fontsize=16)
+plt.title("Motive for receiving relief by gender", fontsize=20)
+
+# %%
 # why receive relief package by gender
 plt.figure(figsize=(15, 10))
 plt.tight_layout()
@@ -545,7 +549,7 @@ cash_spent_df_gender = pd.DataFrame(
     {"male": cash_spent_by_gender_male, "female": cash_spent_by_gender_female},
     index=cash_spent_by_gender_labels,
 )
-cash_spent_df_gender.plot.barh(stacked=True, width=0.75)
+cash_spent_df_gender.plot.barh(width=0.75, figsize=(15, 10), fontsize=16)
 plt.title("Cash spent by gender", fontsize=20)
 
 # %%
@@ -651,6 +655,52 @@ cash_spending_df[cash_spending_columns][
 ].sum(axis=0).sort_values().plot(kind="barh")
 
 # %%
+family_with_children_under18 = [0, 2, 12, 12, 27, 34, 46, 77, 135]
+family_without_children_but_with_elderly = [1, 1, 7, 1, 11, 13, 22, 28, 52]
+family_without_children_under18 = [1, 1, 2, 1, 5, 5, 7, 6, 19]
+
+cash_spent_children_not_df = pd.DataFrame(
+    {
+        "Family with Children age<18": family_with_children_under18,
+        "Family with age 60+ but no under 18": family_without_children_but_with_elderly,
+        "Family without age <18": family_without_children_under18,
+    },
+    index=cash_spent_by_gender_labels,
+)
+cash_spent_children_not_df.plot.barh(width=0.75, figsize=(15, 10), fontsize=18)
+plt.title(
+    "Cash spent by families with children under 18, no under 18 & no under 18 but with at least age 60+",
+    fontsize=24,
+)
+
+
+# %%
+cash_spending_df[cash_spending_columns][
+    (cash_spending_df.male0_5 == 0)
+    & (cash_spending_df.female0_5 == 0)
+    & (cash_spending_df.male6_17 == 0)
+    & (cash_spending_df.female6_17 == 0)
+].sum(axis=0).sort_values()
+
+# %%
+# combining the summary to plot a stacked bar graph
+# cash spending for families with children less than 18 years.
+cash_spending_df[cash_spending_columns][
+    (cash_spending_df.male0_5 > 0)
+    | (cash_spending_df.female0_5 > 0)
+    | (cash_spending_df.male6_17 > 0)
+    | (cash_spending_df.female6_17 > 0)
+].sum(axis=0).sort_values()
+
+# %%
+cash_spending_df[cash_spending_columns][
+    (cash_spending_df.male0_5 > 0)
+    | (cash_spending_df.female0_5 > 0)
+    | (cash_spending_df.male6_17 > 0)
+    | (cash_spending_df.female6_17 > 0)
+].sum(axis=0).sort_values()
+
+# %%
 cash_spending_df[data_df.columns[22:30]]
 
 # %%
@@ -751,6 +801,38 @@ data_df[
 data_df[
     "What do you suggest should be included in the relief of Nepal Red Cross in the future"
 ][data_df["Gender of the informant"] == " female"].value_counts()
+
+# %%
+suggestion_df = data_df[
+    [
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future",
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future  Cash",
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future     food and non-food materials",
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future   others",
+        "otherspelase specify",
+    ]
+]
+suggestion_df.rename(
+    columns={
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future  Cash": "Cash",
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future     food and non-food materials": "food and non-food materials",
+        "What do you suggest should be included in the relief of Nepal Red Cross in the future   others": "others",
+    },
+    inplace=True,
+)
+
+# %%
+suggestion_df[
+    ["Cash", "food and non-food materials", "others"]
+].sum().sort_values().plot(kind="barh", figsize=(15, 10), fontsize=16)
+plt.title("Suggested Items to be added in future packages", fontsize=20)
+plt.show()
+
+# %%
+data_df.loc[
+    :,
+    "What do you suggest should be included in the relief of Nepal Red Cross in the future":,
+].columns
 
 # %%
 index_suggestions = [
@@ -946,19 +1028,12 @@ age_below30 = [0, 0, 2, 2, 4, 4, 5, 8, 11, 19, 21, 23, 35, 35, 38, 39]
 age30_59 = [1, 1, 4, 1, 2, 8, 8, 20, 21, 36, 45, 54, 69, 77, 83, 96]
 age60_above = [0, 0, 0, 0, 1, 3, 0, 1, 2, 8, 2, 5, 7, 4, 10, 12]
 width = 0.75  # the width of the bars: can also be len(x) sequence
-fig, ax2 = plt.subplots()
-plt.tick_params(axis="both", labelsize=16)
-plt.figure(figsize=(30, 20))
-ax2.barh(packages_recieved_by_age_groups, age_below30, width, label="Age below 30")
-ax2.barh(packages_recieved_by_age_groups, age30_59, width, label="Age 30 to 59")
-ax2.barh(packages_recieved_by_age_groups, age60_above, width, label="Age 60 plus")
-ax2.set_xlabel("Frequency")
-ax2.set_title("Package relief received by age groups", fontsize=20)
-ax2.legend()
-plt.savefig(
-    f"{project_dir}/outputs/figures/nepal_descriptive/relief_received_by_age_groups.png"
+packages_received_by_age_groups_df = pd.DataFrame(
+    {"Age below 30": age_below30, "Age 30 to 59": age30_59, "Age 60 plus": age60_above},
+    index=packages_recieved_by_age_groups,
 )
-plt.show()
+packages_received_by_age_groups_df.plot.barh(width=0.75, figsize=(15, 10), fontsize=16)
+plt.title("Items received by age brackets", fontsize=20)
 
 # %%
 data_df[column_dic.values()][

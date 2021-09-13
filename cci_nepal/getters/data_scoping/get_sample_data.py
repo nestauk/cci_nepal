@@ -9,7 +9,10 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.11.4
 #   kernelspec:
-#     display_name: Python 3 (ipykernel)
+ 
+ 
+#     display_name: Python 3
+  
 #     language: python
 #     name: python3
 # ---
@@ -25,6 +28,7 @@ import cci_nepal
 def read_excel_file(file_path):
     df = pd.read_excel(file_path)
     return df
+ 
 
 
 # %%
@@ -34,3 +38,5 @@ def read_csv_file(file_path):
 
 
 # %%
+ 
+ 

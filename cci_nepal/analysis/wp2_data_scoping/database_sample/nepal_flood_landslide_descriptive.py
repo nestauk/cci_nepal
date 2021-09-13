@@ -10,7 +10,9 @@
 #       format_version: '1.3'
 #       jupytext_version: 1.11.4
 #   kernelspec:
-#     display_name: Python 3 (ipykernel)
+
+#     display_name: Python 3
+ 
 #     language: python
 #     name: python3
 # ---
@@ -20,8 +22,11 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 import cci_nepal
+ 
 from cci_nepal.getters.data_scoping import get_sample_data as gsd
 from cci_nepal.pipeline.data_scoping import mis_sample_pipeline as msp
+=======
+ 
 import logging
 import re
 
@@ -38,19 +43,26 @@ logging.info(project_dir)
 
 # %%
 # read sample nepal flood data for 2020
+ 
 data_df = gsd.read_excel_file(f"{project_dir}/inputs/data/PDM_ Datasheet.xlsx")
+ 
 
 # %%
 # data on nepal's population by district in 2011 -could be explored to gain insight about the population distribution
 # of the affected areas.
+ 
 population_df = gsd.read_csv_file(f"{project_dir}/inputs/data/data.csv")
+ 
 
 # %%
 # extract population only
 population = population_df[population_df["Category "] == "Population"]
 
 # %%
+ 
 data_df = msp.clean_df_columns(data_df)
+
+ 
 
 
 # %%
@@ -89,10 +101,15 @@ missing_value_df["percent_missing"].plot(kind="bar")
 plt.xticks([])
 
 # %%
+ 
 IMAGE_DIR = str(project_dir) + "/outputs/figures/data_scoping/mis_sample"
 logging.info(IMAGE_DIR)
 
 # %%
+=======
+# %%
+cci_nepal.PROJECT_DIR
+ 
 # missing values greater than 82%
 plt.figure(figsize=(15, 10))
 missing_value_df["percent_missing"].tail(45).plot(kind="bar")
@@ -304,7 +321,10 @@ plt.title("Why did you choose to receive relief supplies", fontsize=20)
 data_df["Why did you choose to receive relief supplies"].value_counts().plot(
     kind="barh"
 )
+ 
 plt.savefig(f"{IMAGE_DIR}/motive_for_receiving_id.png")
+=======
+ 
 
 # %%
 data_df["Is the informant the person receiving the relief materials"].value_counts()
@@ -317,7 +337,11 @@ plt.title("Why did you choose to receive relief supplies", fontsize=20)
 data_df["Why did you choose to receive relief supplies"][
     data_df["Gender of the informant"] == "  male"
 ].value_counts().plot(kind="barh")
-plt.savefig(f"{IMAGE_DIR}/motive_for_receiving_id_male.png")
+ 
+plt.savefig(
+    f"{project_dir}/outputs/figures/nepal_descriptive/motive_for_receiving_id_male.png"
+)
+ 
 
 # %%
 # motive for receiving relief by gender -male

@@ -54,7 +54,7 @@ init: install setup-github setup-bucket
 
 .PHONY: install
 ## Install a project: create conda env; install local package; setup git hooks; setup metaflow+AWS
-install: conda-create setup-git setup-metaflow
+install: conda-create setup-git #setup-metaflow
 
 .PHONY: inputs-pull
 ## Pull `inputs/` from S3

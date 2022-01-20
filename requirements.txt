@@ -9,4 +9,4 @@ tqdm
 filelock
 typer
 sh
-Sklearn
+sklearn

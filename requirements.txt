@@ -10,3 +10,4 @@ filelock
 typer
 sh
 sklearn
+operator

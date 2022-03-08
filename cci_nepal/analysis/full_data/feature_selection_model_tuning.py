@@ -327,10 +327,10 @@ sfs_mse_scores = test_all_models(
 
 # %%
 # %%capture
-sfs_r2_scores = test_all_models(
+sfm_r2_scores = test_all_models(
     pipes_sfm, "r2", "threshold", ["median", "mean", "1.25*mean", "0.75*mean"]
 )
-sfs_mse_scores = test_all_models(
+sfm_mse_scores = test_all_models(
     pipes_sfm,
     "neg_mean_squared_error",
     "threshold",
@@ -341,6 +341,75 @@ sfs_mse_scores = test_all_models(
 # ### Output scores
 
 # %%
+sfs_r2_scores["linear"][0]
+
+# %%
+r2_sfs = []
+for item in sfs_r2_scores.values():
+    r2_sfs.append(item[0])
+
+r2_sfm = []
+for item in sfm_r2_scores.values():
+    r2_sfm.append(item[0])
+
+# %%
+mse_sfs = []
+for item in sfs_mse_scores.values():
+    mse_sfs.append(item[0])
+
+mse_sfm = []
+for item in sfm_mse_scores.values():
+    mse_sfm.append(item[0])
+
+# %%
+models = ["linear", "ridge", "lasso", "decision tree", "random forest"]
+
+# %%
+zipped = list(zip(models, r2_sfs, r2_sfm, mse_sfs, mse_sfm))
+df_results = pd.DataFrame(
+    zipped,
+    columns=[
+        "model type",
+        "r2 sequential feature selector",
+        "r2 select from model",
+        "mse sequential feature selector",
+        "mse select from model",
+    ],
+)
+
+# %%
+df_results.set_index("model type", inplace=True)
+
+# %%
+df_results["mse select from model"] = df_results["mse select from model"].abs()
+df_results["mse sequential feature selector"] = df_results[
+    "mse sequential feature selector"
+].abs()
+
+# %%
+df_results
+
+# %%
+plt.rcParams["axes.facecolor"] = "white"
+
+# %%
+df_results[["r2 sequential feature selector", "r2 select from model"]].plot()
+
+# %%
+df_results[["mse sequential feature selector", "mse select from model"]].plot()
+
+# %%
 sfs_r2_scores
+
+# %%
+sfs_mse_scores
+
+# %%
+sfm_r2_scores
+
+# %%
+sfm_mse_scores
+
+# %%
 
 # %%

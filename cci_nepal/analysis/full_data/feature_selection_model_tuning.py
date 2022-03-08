@@ -319,10 +319,10 @@ pipes_sfm = [pipe_lr_sfm, pipe_rr_sfm, pipe_ls_sfm, pipe_dt_sfm, pipe_rf_sfm]
 # %%
 # %%capture
 sfs_r2_scores = test_all_models(
-    pipes_sfs, "r2", "n_features_to_select", [2, 5, 10, 15, 18]
+    pipes_sfs, "r2", "n_features_to_select", [2, 5, 10, 15, 19]
 )
 sfs_mse_scores = test_all_models(
-    pipes_sfs, "neg_mean_squared_error", "n_features_to_select", [2, 5, 10, 15, 18]
+    pipes_sfs, "neg_mean_squared_error", "n_features_to_select", [2, 5, 10, 15, 19]
 )
 
 # %%

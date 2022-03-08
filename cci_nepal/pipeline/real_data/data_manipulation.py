@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+# %%
 # Import libraries
 import pandas as pd
 from cci_nepal.pipeline.real_data import nfri_list_file as nlf
@@ -45,15 +47,16 @@ def replace_columns_with_number(df, columns, values):
 
 
 def nfri_preferences_to_numbers(df):
-
     """
     Takes in a dataframe a returns a dataframe with nfri categorical preferences transformed into numbers.
     """
-
     mapping = {
         "Essential": 3,
+        "essential": 3,
         "Desirable": 2,
+        "desirable": 2,
         "Unnecessary": 1,
+        "unncessary": 1,
         "Essential (अति आवश्यक) ": 3,
         "Desirable (आवश्यक)": 2,
         "Unnecessary (अनावश्यक)": 1,

@@ -20,6 +20,7 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 import warnings
+from sklearn.utils import shuffle
 
 warnings.filterwarnings("ignore")
 from cci_nepal.getters.real_data import get_real_data as grd
@@ -48,9 +49,7 @@ print(test_hill.shape)
 print(train_terai.shape)
 print(test_terai.shape)
 
-# +
 # Write into csv files
-
 train_hill.to_csv(
     f"{project_dir}/outputs/data/data_for_modelling/train_hill.csv", index=False
 )
@@ -63,3 +62,19 @@ train_terai.to_csv(
 test_terai.to_csv(
     f"{project_dir}/outputs/data/data_for_modelling/test_terai.csv", index=False
 )
+
+# Split train - train/validation
+train_hill, val_hill = train_test_split(train_hill, test_size=0.1, random_state=42)
+train_terai, val_terai = train_test_split(train_terai, test_size=0.1, random_state=42)
+# Group hill and plain
+train = pd.concat([train_hill, train_terai], ignore_index=True)
+val = pd.concat([val_hill, val_terai], ignore_index=True)
+
+# Re-shuffle sets
+train = shuffle(train, random_state=1)
+# Re-shuffle sets
+val = shuffle(val, random_state=1)
+
+# Save train and val sets
+train.to_csv(f"{project_dir}/outputs/data/data_for_modelling/train.csv", index=False)
+val.to_csv(f"{project_dir}/outputs/data/data_for_modelling/val.csv", index=False)

@@ -2,6 +2,7 @@
 # %%
 # Import libraries
 import pandas as pd
+import numpy as np
 from cci_nepal.pipeline.real_data import nfri_list_file as nlf
 
 

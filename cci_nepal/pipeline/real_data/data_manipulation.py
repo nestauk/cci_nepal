@@ -83,35 +83,7 @@ def transform_sets(df, column_names):
     Dropping un-needed columns, renaming columns, remove new nfri items, update house materials,
     dropping 'other' columns, fill empty values with 0
     """
-    columns_to_drop = [
-        0,
-        4,
-        7,
-        18,
-        31,
-        41,
-        43,
-        44,
-        56,
-        57,
-        69,
-        70,
-        71,
-        72,
-        73,
-        74,
-        75,
-        76,
-        77,
-        78,
-        79,
-        80,
-        81,
-        82,
-        83,
-        84,
-        85,
-    ]
+    columns_to_drop = [5, 16, 29, 39, 41, 42, 54, 55, 67, 68, 69, 70, 71]
     df.drop(df.columns[columns_to_drop], axis=1, inplace=True)
     df.columns = column_names
     # Update house materials column
@@ -157,7 +129,7 @@ def feature_creation(df):
     df.health_difficulty = np.where(df.health_difficulty > 0, 1, 0)
     df["respondent_female"] = np.where(df.Respondent_Gender == "female", 1, 0)
     df["previous_nfri"] = np.where(df.Previous_NFRI == "yes", 1, 0)
-    df["sindupalchowk"] = np.where(df.District == "Sindupalchowk", 1, 0)
+    df["sindupalchowk"] = np.where(df.District == "Sindupalchok", 1, 0)
     df.income_gen_ratio = df.income_gen_ratio.replace(np.inf, np.nan)
     df.income_gen_adults = df.income_gen_adults.replace(np.inf, np.nan)
     df.fillna(0, inplace=True)

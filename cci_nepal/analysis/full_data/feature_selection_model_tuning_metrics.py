@@ -21,6 +21,7 @@
 # %%
 # Import libraries
 import pandas as pd
+import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
@@ -32,6 +33,9 @@ from sklearn.feature_selection import SelectFromModel
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.pipeline import Pipeline
+from sklearn.metrics import f1_score
+from sklearn.metrics import accuracy_score
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.model_selection import GridSearchCV
 import itertools
 
@@ -163,14 +167,64 @@ def test_all_models(pipes, score, fs_param_name, fs_params):
         search_rf, y_train_basic
     )
 
-    all_scores = {
+    all_scores_basic = {
         "linear": [bs_lr_basic, bp_lr_basic, ftk_lr_basic],
         "ridge": [bs_rr_basic, bp_rr_basic, ftk_rr_basic],
         "lasso": [bs_ls_basic, bp_ls_basic, ftk_ls_basic],
         "decision_tree": [bs_dt_basic, bp_dt_basic, ftk_dt_basic],
         "random_forest": [bs_rf_basic, bp_rf_basic, ftk_rf_basic],
     }
-    return all_scores
+
+    all_scores_non_basic = {
+        "linear": [bs_lr_non_basic, bp_lr_non_basic, ftk_lr_non_basic],
+        "ridge": [bs_rr_non_basic, bp_rr_non_basic, ftk_rr_non_basic],
+        "lasso": [bs_ls_non_basic, bp_ls_non_basic, ftk_ls_non_basic],
+        "decision_tree": [bs_dt_non_basic, bp_dt_non_basic, ftk_dt_non_basic],
+        "random_forest": [bs_rf_non_basic, bp_rf_non_basic, ftk_rf_non_basic],
+    }
+    return all_scores_basic, all_scores_non_basic
+
+
+# %%
+def accuracy_per_item(model, nfri_type, test_input, test_output):
+
+    """
+    Takes the test input and output and outputs the accuracy of the Model per NFRI item.
+
+    Parameters:
+
+    model: Trained Machine Learning model
+    nfri_type: Type of NFRI to predict (basic-nfri or non-basic-nfri)
+    test_input: The test set input dataframe
+    test_output: The test set output dataframe
+
+    Returns:
+
+    A pandas dataframe with accuracy per NFRI item
+    """
+
+    if nfri_type == "nfri-basic":
+        nfri_list = basic
+    elif nfri_type == "nfri-non-basic":
+        nfri_list = non_basic
+    else:
+        return print("Please enter the correct nfri type.")
+
+    test_prediction = model.predict(test_input)
+    test_prediction_label = [
+        [dm.numeric_score_transformer(i) for i in nested] for nested in test_prediction
+    ]
+    test_prediction_label_transformed = list(map(list, zip(*test_prediction_label)))
+    accuracy_list = []
+    for i in range(0, len(nfri_list)):
+        accuracy_list.append(
+            accuracy_score(test_prediction_label_transformed[i], test_output.iloc[:, i])
+        )
+
+    return (
+        pd.DataFrame(accuracy_list, test_output.columns, columns=["Accuracy"]),
+        test_prediction_label_transformed,
+    )
 
 
 # %%
@@ -179,8 +233,8 @@ project_dir = cci_nepal.PROJECT_DIR
 
 # %%
 # Read data and feature names
-train = pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/train.csv")
-val = pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/val.csv")
+train = pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/new_data/train.csv")
+val = pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/new_data/val.csv")
 column_names = grd.get_lists(f"{project_dir}/cci_nepal/config/column_names.csv")
 select_features = grd.get_lists(f"{project_dir}/cci_nepal/config/select_features.csv")
 
@@ -230,7 +284,11 @@ transformer = ColumnTransformer(
                 "income_gen_adults",
             ],
         ),
-        ("one_hot", OneHotEncoder(drop="first"), ["Ethnicity", "House_Material"]),
+        (
+            "one_hot",
+            OneHotEncoder(drop="first", handle_unknown="ignore"),
+            ["Ethnicity", "House_Material"],
+        ),
     ],
     remainder="passthrough",
 )
@@ -250,7 +308,7 @@ random_forest = MultiOutputRegressor(RandomForestRegressor(random_state=42))
 # Sequential feature selector
 sfs_selector = SequentialFeatureSelector(
     estimator=LinearRegression(),
-    n_features_to_select=5,
+    n_features_to_select=18,
     cv=2,
     direction="backward",
 )
@@ -318,19 +376,20 @@ pipes_sfm = [pipe_lr_sfm, pipe_rr_sfm, pipe_ls_sfm, pipe_dt_sfm, pipe_rf_sfm]
 
 # %%
 # %%capture
-sfs_r2_scores = test_all_models(
+
+sfs_r2_scores_basic, sfs_r2_scores_non_basic = test_all_models(
     pipes_sfs, "r2", "n_features_to_select", [2, 5, 10, 15, 19]
 )
-sfs_mse_scores = test_all_models(
+sfs_mse_scores_basic, sfs_mse_scores_non_basic = test_all_models(
     pipes_sfs, "neg_mean_squared_error", "n_features_to_select", [2, 5, 10, 15, 19]
 )
 
 # %%
 # %%capture
-sfm_r2_scores = test_all_models(
+sfm_r2_scores_basic, sfm_r2_scores_non_basic = test_all_models(
     pipes_sfm, "r2", "threshold", ["median", "mean", "1.25*mean", "0.75*mean"]
 )
-sfm_mse_scores = test_all_models(
+sfm_mse_scores_basic, sfm_mse_scores_non_basic = test_all_models(
     pipes_sfm,
     "neg_mean_squared_error",
     "threshold",
@@ -338,27 +397,30 @@ sfm_mse_scores = test_all_models(
 )
 
 # %% [markdown]
-# ### Output scores
+# ### Output scores - full data
 
 # %%
-sfs_r2_scores["linear"][0]
+sfs_r2_scores_basic["linear"][0]
+
+# %% [markdown]
+# #### Basic
 
 # %%
 r2_sfs = []
-for item in sfs_r2_scores.values():
+for item in sfs_r2_scores_basic.values():
     r2_sfs.append(item[0])
 
 r2_sfm = []
-for item in sfm_r2_scores.values():
+for item in sfm_r2_scores_basic.values():
     r2_sfm.append(item[0])
 
 # %%
 mse_sfs = []
-for item in sfs_mse_scores.values():
+for item in sfs_mse_scores_basic.values():
     mse_sfs.append(item[0])
 
 mse_sfm = []
-for item in sfm_mse_scores.values():
+for item in sfm_mse_scores_basic.values():
     mse_sfm.append(item[0])
 
 # %%
@@ -399,17 +461,293 @@ df_results[["r2 sequential feature selector", "r2 select from model"]].plot()
 df_results[["mse sequential feature selector", "mse select from model"]].plot()
 
 # %%
-sfs_r2_scores
+sfs_r2_scores_basic
 
 # %%
-sfs_mse_scores
+sfs_mse_scores_basic
 
 # %%
-sfm_r2_scores
+sfm_r2_scores_basic
 
 # %%
-sfm_mse_scores
+sfm_mse_scores_basic
+
+# %% [markdown]
+# #### Non-basic
 
 # %%
+r2_sfs = []
+for item in sfs_r2_scores_non_basic.values():
+    r2_sfs.append(item[0])
+
+r2_sfm = []
+for item in sfm_r2_scores_non_basic.values():
+    r2_sfm.append(item[0])
 
 # %%
+mse_sfs = []
+for item in sfs_mse_scores_non_basic.values():
+    mse_sfs.append(item[0])
+
+mse_sfm = []
+for item in sfm_mse_scores_non_basic.values():
+    mse_sfm.append(item[0])
+
+# %%
+models = ["linear", "ridge", "lasso", "decision tree", "random forest"]
+
+# %%
+zipped = list(zip(models, r2_sfs, r2_sfm, mse_sfs, mse_sfm))
+df_results = pd.DataFrame(
+    zipped,
+    columns=[
+        "model type",
+        "r2 sequential feature selector",
+        "r2 select from model",
+        "mse sequential feature selector",
+        "mse select from model",
+    ],
+)
+
+# %%
+df_results.set_index("model type", inplace=True)
+
+# %%
+df_results["mse select from model"] = df_results["mse select from model"].abs()
+df_results["mse sequential feature selector"] = df_results[
+    "mse sequential feature selector"
+].abs()
+
+# %%
+df_results
+
+# %%
+plt.rcParams["axes.facecolor"] = "white"
+
+# %%
+df_results[["r2 sequential feature selector", "r2 select from model"]].plot()
+
+# %%
+df_results[["mse sequential feature selector", "mse select from model"]].plot()
+
+# %%
+sfs_r2_scores_non_basic
+
+# %%
+sfs_mse_scores_basic
+
+# %%
+sfm_r2_scores_basic
+
+# %%
+sfm_mse_scores_basic
+
+# %% [markdown]
+# ### Test final results on validation set
+
+# %%
+# Apply column transformer
+X_train = transformer.fit_transform(X_train)
+X_val = transformer.transform(X_val)
+
+# %%
+# Assign back to dataframes - to have feature names back
+X_train = pd.DataFrame(X_train, columns=list(transformer.get_feature_names_out()))
+X_val = pd.DataFrame(X_val, columns=list(transformer.get_feature_names_out()))
+
+# %%
+X_val.head(1)
+
+# %% [markdown]
+# #### Best performing from train - random forest, select from model
+
+# %%
+random_forest = MultiOutputRegressor(
+    RandomForestRegressor(random_state=42, n_estimators=100)
+)
+
+# %%
+random_forest.fit(
+    X_train[
+        [
+            "one_hot__Ethnicity_madhesi",
+            "one_hot__Ethnicity_other",
+            "one_hot__Ethnicity_prefer_not_to_answer",
+            "one_hot__House_Material_mud_bonded_bricks_stone",
+            "one_hot__House_Material_other",
+            "one_hot__House_Material_rcc_with_pillar",
+            "one_hot__House_Material_wooden_pillar",
+            "remainder__previous_nfri",
+            "remainder__sindupalchowk",
+        ]
+    ],
+    y_train_basic,
+)
+
+# %%
+rf_predictions = random_forest.predict(
+    X_val[
+        [
+            "one_hot__Ethnicity_madhesi",
+            "one_hot__Ethnicity_other",
+            "one_hot__Ethnicity_prefer_not_to_answer",
+            "one_hot__House_Material_mud_bonded_bricks_stone",
+            "one_hot__House_Material_other",
+            "one_hot__House_Material_rcc_with_pillar",
+            "one_hot__House_Material_wooden_pillar",
+            "remainder__previous_nfri",
+            "remainder__sindupalchowk",
+        ]
+    ]
+)
+
+# %%
+from sklearn.metrics import r2_score
+
+# %%
+r2_score(y_val_basic, rf_predictions)
+
+# %% [markdown]
+# #### Best performing linear regression - sequential feature selector
+
+# %%
+linear = MultiOutputRegressor(LinearRegression())
+
+# %%
+transformer.get_feature_names_out()
+
+# %%
+linear_chosen = [
+    "rob_scaler__household_size",
+    "rob_scaler__percent_female",
+    "rob_scaler__income_gen_ratio",
+    "rob_scaler__income_gen_adults",
+    "one_hot__Ethnicity_dalit",
+    "one_hot__Ethnicity_madhesi",
+    "one_hot__Ethnicity_other",
+    "one_hot__Ethnicity_prefer_not_to_answer",
+    "one_hot__House_Material_mud_bonded_bricks_stone",
+    "one_hot__House_Material_other",
+    "one_hot__House_Material_wooden_pillar",
+    "remainder__children",
+    "remainder__children_under_5",
+    "remainder__previous_nfri",
+    "remainder__sindupalchowk",
+]
+
+# %%
+linear.fit(X_train[linear_chosen], y_train_basic)
+
+# %%
+lr_predictions = linear.predict(X_val[linear_chosen])
+
+# %%
+r2_score(y_val_basic, lr_predictions)
+
+# %% [markdown]
+# #### Classification results
+
+# %%
+df_basic_acc, predictions_basic = accuracy_per_item(
+    linear, "nfri-basic", X_val[linear_chosen], y_val_basic
+)
+
+# %%
+df_basic_acc.sort_values(by="Accuracy", ascending=True).plot(kind="barh")
+plt.title("Accuracy per item - NFRI basic")
+
+# %%
+len(predictions_basic[0])
+
+# %%
+np.array(predictions_basic[0])
+
+# %%
+y_val_basic.columns
+
+# %%
+cm = confusion_matrix(
+    list(y_val_basic[y_val_basic.columns[10]]), predictions_basic[10], labels=[1, 2, 3]
+)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=[1, 2, 3])
+disp.plot()
+plt.title(y_val_basic.columns[10])
+plt.show()
+
+# %%
+for i in range(0, 11):
+    print(
+        f1_score(
+            y_val_basic[y_val_basic.columns[i]], predictions_basic[i], average="macro"
+        )
+    )
+
+# %% [markdown]
+# ### New non-basic
+
+# %%
+linear_chosen = [
+    "rob_scaler__household_size",
+    "rob_scaler__percent_female",
+    "rob_scaler__income_gen_ratio",
+    "rob_scaler__income_gen_adults",
+    "one_hot__Ethnicity_dalit",
+    "one_hot__Ethnicity_madhesi",
+    "one_hot__Ethnicity_other",
+    "one_hot__Ethnicity_prefer_not_to_answer",
+    "one_hot__House_Material_mud_bonded_bricks_stone",
+    "one_hot__House_Material_other",
+    "one_hot__House_Material_wooden_pillar",
+    "remainder__children",
+    "remainder__children_under_5",
+    "remainder__previous_nfri",
+    "remainder__sindupalchowk",
+]
+
+# %%
+linear.fit(X_train[linear_chosen], y_train_non_basic)
+
+# %%
+lr_predictions = linear.predict(X_val[linear_chosen])
+
+# %%
+r2_score(y_val_non_basic, lr_predictions)
+
+# %%
+df_non_basic_acc, predictions_non_basic = accuracy_per_item(
+    linear, "nfri-non-basic", X_val[linear_chosen], y_val_non_basic
+)
+
+# %%
+df_non_basic_acc
+
+# %%
+cm = confusion_matrix(
+    list(y_val_non_basic[y_val_non_basic.columns[0]]),
+    predictions_non_basic[0],
+    labels=[1, 2, 3],
+)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=[1, 2, 3])
+disp.plot()
+plt.title(y_val_non_basic.columns[10])
+plt.show()
+
+# %%
+for i in range(0, 11):
+    print(
+        f1_score(
+            y_val_non_basic[y_val_non_basic.columns[i]],
+            predictions_non_basic[i],
+            average="macro",
+        )
+    )
+
+# %%
+for i in range(0, 11):
+    print(
+        f1_score(
+            y_val_non_basic[y_val_non_basic.columns[i]],
+            predictions_non_basic[i],
+            average="micro",
+        )
+    )

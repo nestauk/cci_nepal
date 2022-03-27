@@ -26,7 +26,7 @@ df_health_difficulty = tm.create_terms_per_category(df_text, "Health Difficulty"
 # Combine untranslated terms without repetition for human translation activity
 tm.create_one_combined_file(
     df_general, df_women, df_children, df_health_difficulty
-).to_csv(f"{project_dir}/outputs/data/free_text/Combined Terms To Translate.csv")
+).to_csv(f"{project_dir}/outputs/data/free text/Combined Terms To Translate.csv")
 
 # Read the human translated free text data
 df_combined = grd.read_csv_file(

@@ -9,8 +9,5 @@ tqdm
 filelock
 typer
 sh
-re
-intertools
-collections
 nltk
 wordcloud

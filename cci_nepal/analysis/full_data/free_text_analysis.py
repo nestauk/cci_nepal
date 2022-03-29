@@ -12,7 +12,7 @@ project_dir = cci_nepal.PROJECT_DIR
 
 # Read the original survey data
 
-df = grd.read_csv_file(f"{project_dir}/inputs/data/real_data/Complete Database.csv")
+df = grd.read_complete_data()
 
 # Select only the free-text columns from the original dataframe
 df_text = df.iloc[:, -5:-1]
@@ -29,9 +29,7 @@ tm.create_one_combined_file(
 ).to_csv(f"{project_dir}/outputs/data/free text/Combined Terms To Translate.csv")
 
 # Read the human translated free text data
-df_combined = grd.read_csv_file(
-    f"{project_dir}/inputs/data/real_data/Free Text Activity - Combined Result.csv"
-)
+df_combined = grd.read_free_text_activity_data()
 
 # Output translated terms per category using human translated data
 logging.info(tm.create_translated_terms_per_category(df_combined, df_general))

@@ -1,16 +1,17 @@
-# %%
 # Import libraries
 import pandas as pd
 
+# Set the project directory
+import cci_nepal
 
-# %%
-# Read Excel file
-def read_excel_file(file_path):
-    df = pd.read_excel(file_path)
-    return df
+project_dir = cci_nepal.PROJECT_DIR
 
 
-# %%
-# Read CSV file
-def read_csv_file(file_path):
-    return pd.read_csv(file_path)
+def read_complete_data():
+    return pd.read_csv(f"{project_dir}/inputs/data/real_data/Complete Database.csv")
+
+
+def read_free_text_activity_data():
+    return pd.read_csv(
+        f"{project_dir}/inputs/data/real_data/Free Text Activity - Combined Result.csv"
+    )

@@ -15,11 +15,11 @@ def label_transformer(d):
     """
 
     if d < 1.5:
-        return "Unnecessary"
+        return "unnecessary"
     elif d < 2.5:
-        return "Desirable"
+        return "desirable"
     else:
-        return "Essential"
+        return "essential"
 
 
 def numeric_score_transformer(d):
@@ -52,15 +52,12 @@ def nfri_preferences_to_numbers(df):
     Takes in a dataframe a returns a dataframe with nfri categorical preferences transformed into numbers.
     """
     mapping = {
-        "Essential": 3,
-        "essential": 3,
-        "Desirable": 2,
-        "desirable": 2,
-        "Unnecessary": 1,
-        "unncessary": 1,
-        "Essential (अति आवश्यक) ": 3,
-        "Desirable (आवश्यक)": 2,
-        "Unnecessary (अनावश्यक)": 1,
+        "essential": 1,
+        "desirable": 0,
+        "unnecessary": 0,
+        "essential (अति आवश्यक) ": 1,
+        "desirable (आवश्यक)": 0,
+        "unnecessary (अनावश्यक)": 0,
     }
     return df.applymap(lambda s: mapping.get(s) if s in mapping else s)
 
@@ -88,13 +85,13 @@ def transform_sets(df, column_names):
     df.columns = column_names
     # Update house materials column
     cemment_with_bricks = [
-        "Bricks with ciment",
+        "bricks with ciment",
         "btickets with ciment",
         "brickets with ciment",
     ]
     df.loc[
-        df.Material_Other.isin(cemment_with_bricks), "House_Material"
-    ] = "Cement bonded bricks/stone"
+        df.Material_Other.isin(cemment_with_bricks), "house_material"
+    ] = "cement bonded bricks/stone"
     df.drop(["Material_Other", "Ethnicity_Others"], axis=1, inplace=True)
     df.fillna(0, inplace=True)
     df["Respondent_Age"] = df["Respondent_Age"].astype(str).map(lambda x: x.strip())
@@ -129,7 +126,7 @@ def feature_creation(df):
     df.health_difficulty = np.where(df.health_difficulty > 0, 1, 0)
     df["respondent_female"] = np.where(df.Respondent_Gender == "female", 1, 0)
     df["previous_nfri"] = np.where(df.Previous_NFRI == "yes", 1, 0)
-    df["sindupalchowk"] = np.where(df.District == "Sindupalchok", 1, 0)
+    df["sindupalchowk"] = np.where(df.District == "sindupalchok", 1, 0)
     df.income_gen_ratio = df.income_gen_ratio.replace(np.inf, np.nan)
     df.income_gen_adults = df.income_gen_adults.replace(np.inf, np.nan)
     df.fillna(0, inplace=True)

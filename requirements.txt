@@ -9,3 +9,5 @@ tqdm
 filelock
 typer
 sh
+nltk
+wordcloud

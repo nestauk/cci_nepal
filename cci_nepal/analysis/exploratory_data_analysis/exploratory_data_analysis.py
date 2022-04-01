@@ -232,19 +232,13 @@ df_other = df[df["House_Material"] == "other"]
 df_other.loc[:, "Material_Other"].value_counts(normalize=True).plot(kind="bar")
 
 
-# In[22]:
-
-
-df_other.loc[:, "Material_Other"].value_counts(normalize=True)
-
-
 # As we can see, almost 2/3rd (65 percent) of the other categories have "mato ghar" as the answer, meaning clay house, followed by clay again at 6 percent. The other answers are also mostly clay related terms. Thus, the "other" category mostly refers to the "Clay" as house materials.
 
 # In the third part of analysis, we will delve deeper into the individual categories and see if the "other" category differ from others or not.
 
 # #### Total Income Generating Members ####
 
-# In[23]:
+# In[22]:
 
 
 ax = (
@@ -257,7 +251,7 @@ ax.bar_label(ax.containers[0])
 
 # #### Previous NFRI History ####
 
-# In[24]:
+# In[23]:
 
 
 ax = df.loc[:, "Previous_NFRI"].value_counts(normalize=True).plot(kind="bar")
@@ -271,7 +265,7 @@ ax.bar_label(ax.containers[0])
 
 # #### Basic ####
 
-# In[25]:
+# In[24]:
 
 
 df_preference_labels_basic = (
@@ -287,7 +281,7 @@ ax = sns.heatmap(df_preference_labels_basic, annot=True)
 
 # #### Non Basic ####
 
-# In[26]:
+# In[25]:
 
 
 df_preference_labels_non_basic = (
@@ -305,35 +299,37 @@ ax = sns.heatmap(df_preference_labels_non_basic, annot=True)
 
 # #### Analysing NFRI Preferences as Numeric Scores ####
 
-# In[27]:
+# In[26]:
 
 
-df = dm.nfri_preferences_to_numbers(df)
+df_numeric = dm.nfri_preferences_to_numbers(df)
 
 
 # #### NFRI Basic ####
 
-# In[28]:
+# In[27]:
 
 
-df.loc[:, basic].agg(["mean", np.std])
+df_numeric.loc[:, basic].agg(["mean", np.std])
 
 
 # #### NFRI Non Basic ####
 
-# In[29]:
+# In[28]:
 
 
-df.loc[:, non_basic].agg(["mean", np.std])
+df_numeric.loc[:, non_basic].agg(["mean", np.std])
 
 
 # #### Correlation Matrix ####
 
-# In[30]:
+# In[29]:
 
 
 plt.figure(figsize=(16, 6))
-heatmap = sns.heatmap(df.loc[:, basic].corr(), vmin=-1, vmax=1, annot=True, cmap="BrBG")
+heatmap = sns.heatmap(
+    df_numeric.loc[:, basic].corr(), vmin=-1, vmax=1, annot=True, cmap="BrBG"
+)
 heatmap.set_title("Correlation Heatmap for Basic", fontdict={"fontsize": 18}, pad=12)
 
 
@@ -341,12 +337,12 @@ heatmap.set_title("Correlation Heatmap for Basic", fontdict={"fontsize": 18}, pa
 #
 # Interetingly, sacking bag and nylon rope also have relatively high correlation. Same for Water Bucket and Utensil Set.
 
-# In[31]:
+# In[30]:
 
 
 plt.figure(figsize=(16, 6))
 heatmap = sns.heatmap(
-    df.loc[:, non_basic].corr(), vmin=-1, vmax=1, annot=True, cmap="BrBG"
+    df_numeric.loc[:, non_basic].corr(), vmin=-1, vmax=1, annot=True, cmap="BrBG"
 )
 heatmap.set_title(
     "Correlation Heatmap for Non Basic", fontdict={"fontsize": 18}, pad=12
@@ -363,18 +359,18 @@ heatmap.set_title(
 
 # #### NFRI Basic ####
 
-# In[32]:
+# In[31]:
 
 
-df.groupby("Respondent_Gender", as_index=True).apply(np.mean).loc[:, basic]
+df_numeric.groupby("Respondent_Gender", as_index=True).apply(np.mean).loc[:, basic]
 
 
 # #### NFRI Non Basic ####
 
-# In[33]:
+# In[32]:
 
 
-df.groupby("Respondent_Gender", as_index=True).apply(np.mean).loc[:, non_basic]
+df_numeric.groupby("Respondent_Gender", as_index=True).apply(np.mean).loc[:, non_basic]
 
 
 # As we can see, for both basic and non basic, the NFRI preference scores are almost identical for all the items. That way, the preference scores of items are similar regardless of respondent gender.
@@ -383,25 +379,25 @@ df.groupby("Respondent_Gender", as_index=True).apply(np.mean).loc[:, non_basic]
 
 # To see if there could be change in preferences scores for households with different gender ration, we will create a new variable called Gender Ratio and compare for households with less than and more than 50 percent male. (Households with equal ratio are omitted for this analysis.)
 
-# In[34]:
+# In[33]:
 
 
-df["Gender_Ratio"] = df["Total_Male"] / df["Total_Members"]
-df["Gender_Ratio_Label"] = np.where(
-    df["Gender_Ratio"] > 0.5,
+df_numeric["Gender_Ratio"] = df_numeric["Total_Male"] / df_numeric["Total_Members"]
+df_numeric["Gender_Ratio_Label"] = np.where(
+    df_numeric["Gender_Ratio"] > 0.5,
     "Male_Majority",
     np.where(
-        df["Gender_Ratio"] < 0.5,
+        df_numeric["Gender_Ratio"] < 0.5,
         "Female_Majority",
         "Balanced",
     ),
 )
 
 
-# In[35]:
+# In[34]:
 
 
-df.loc[df["Gender_Ratio_Label"] != "Balanced"].groupby(
+df_numeric.loc[df_numeric["Gender_Ratio_Label"] != "Balanced"].groupby(
     "Gender_Ratio_Label",
     as_index=True,
 ).apply(np.mean).loc[:, basic]
@@ -409,10 +405,10 @@ df.loc[df["Gender_Ratio_Label"] != "Balanced"].groupby(
 
 # Seriously man, so so so identical! Even for Sari the score for both is very similar (in fact slighly higher for Male Majority).
 
-# In[36]:
+# In[35]:
 
 
-df.loc[df["Gender_Ratio_Label"] != "Balanced"].groupby(
+df_numeric.loc[df_numeric["Gender_Ratio_Label"] != "Balanced"].groupby(
     "Gender_Ratio_Label",
     as_index=True,
 ).apply(np.mean).loc[:, non_basic]
@@ -422,18 +418,26 @@ df.loc[df["Gender_Ratio_Label"] != "Balanced"].groupby(
 
 # #### NFRI Preferences Ethnicity Wise ####
 
-# In[37]:
+# In[36]:
 
 
-df.groupby("Ethnicity")[basic].apply(lambda x: x.astype(int).mean()).iloc[
+df_numeric.groupby("Ethnicity")[basic].apply(lambda x: x.astype(int).mean()).iloc[
     0:4,
 ]  # Comparing across the four major ethnicities only as they make up more than 95 percent
 
 
-# In[38]:
+# In[56]:
 
 
-df.groupby("Ethnicity")[non_basic].apply(lambda x: x.astype(int).mean()).iloc[
+df_numeric.groupby("Ethnicity", as_index=False, sort=True)[
+    "Income_Generating_Members"
+].apply(lambda x: x.astype(int).mean()).iloc[0:4]
+
+
+# In[39]:
+
+
+df_numeric.groupby("Ethnicity")[non_basic].apply(lambda x: x.astype(int).mean()).iloc[
     0:4,
 ]
 
@@ -442,45 +446,86 @@ df.groupby("Ethnicity")[non_basic].apply(lambda x: x.astype(int).mean()).iloc[
 
 # #### NFRI Preferences House Material wise ####
 
-# In[39]:
+# In[40]:
 
 
-df.groupby("House_Material")[basic].apply(lambda x: x.astype(int).mean()).iloc[
+df_numeric.groupby("House_Material")[basic].apply(lambda x: x.astype(int).mean()).iloc[
     0:4,
 ]
 
 
-# In[40]:
+# In[41]:
 
 
-df.groupby("House_Material")[non_basic].apply(lambda x: x.astype(int).mean()).iloc[
+df_numeric.groupby("House_Material")[non_basic].apply(
+    lambda x: x.astype(int).mean()
+).iloc[
     0:4,
 ]
 
 
 # As we see, the category other has signicantly higher score for both basis and non-basic, specially for items that have lower scores for other categories. (Like for Sari, Male Dhoti, Clothing items, Whistle Blow.)
 
+# Since more than 70 percent of Other category is made up of Clay related words, we will analyse for observations where Clay is the household material, just to see how the NFRI Preference scores vary for Clay houses.
+
+# In[119]:
+
+
+df_clay = df_numeric[
+    df_numeric["Material_Other"].str.contains("Mato ghar|clay", case=False)
+]
+
+
+# In[115]:
+
+
+df_clay[basic].apply(lambda x: x.astype(int).mean())
+
+
+# In[116]:
+
+
+df_clay[non_basic].apply(lambda x: x.astype(int).mean())
+
+
+# As we see, for the obsevations with Clay as house material (almost 15 percent of the total observation), the NFRI scores are siginificantly higher for almost all the items. This highlights that the households with house material as clay rate most items as essential.
+
+# #### Delving deeper into House Material and Ethnicity : Two influential features ####
+
+# Since NFRI score was found to be higher for Madhesi and Dalit ethnicity, and also house material category "Other" (most of which is Clay), we will see how these two variables are related to each other.
+
+# In[125]:
+
+
+pd.DataFrame(
+    df_numeric.groupby("Ethnicity", as_index=True, sort=True)["House_Material"].apply(
+        lambda x: x.value_counts(normalize=True)
+    )
+).iloc[0:-8:]
+
+
+# As we can see, the "Other" house material is significantly present in only two Ethnicities Dalit and Madhesi, both ethnicities that had significantly higher importance scores than others.
+#
+# Specially for Dalit ethnicity, the Other category is the most frequent category, making almost 50 percent.
+
 # #### NFRI Preferences previous NFRI history wise ####
-
-# In[41]:
-
-
-df.groupby("Previous_NFRI", as_index=True,).apply(
-    np.mean
-).loc[:, basic]
-
 
 # In[42]:
 
 
-logging.info(
-    df.groupby(
-        "Previous_NFRI",
-        as_index=True,
-    )
-    .apply(np.mean)
-    .loc[:, non_basic]
-)
+df_numeric.groupby("Previous_NFRI", as_index=True,).apply(
+    np.mean
+).loc[:, basic]
+
+
+# In[43]:
+
+
+df_numeric.groupby("Previous_NFRI", as_index=True,).apply(
+    np.mean
+).loc[:, non_basic]
 
 
 # As we can see, for most of the items in basic, the preference score is higher for No category (households that haven't received NFRI in past.) As for non basic, the scores are fairly similar except for Whistle Blow, which has also higher score for No category.
+
+logging.info("And this is where our analysis ends .... for now!")

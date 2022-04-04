@@ -40,6 +40,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
+import pickle
 
 # Project libraries
 import cci_nepal
@@ -180,3 +181,10 @@ f1_scores_basic, f1_scores_non_basic = mtr.test_all_models(
 )
 
 # %%
+with open(
+    f"{project_dir}/outputs/data/model_results/f1_scores_non_basic.pkl", "wb"
+) as f:
+    pickle.dump(f1_scores_non_basic, f)
+
+with open(f"{project_dir}/outputs/data/model_results/f1_scores_basic.pkl", "wb") as f:
+    pickle.dump(f1_scores_basic, f)

@@ -239,6 +239,10 @@ column_names = grd.get_lists(f"{project_dir}/cci_nepal/config/column_names.csv")
 select_features = grd.get_lists(f"{project_dir}/cci_nepal/config/select_features.csv")
 
 # %%
+train = train.applymap(lambda s: s.lower() if type(s) == str else s)
+val = val.applymap(lambda s: s.lower() if type(s) == str else s)
+
+# %%
 # Items, basic and non-basic divide
 nfri_items = column_names[37:]
 basic = nfri_items[0:11]

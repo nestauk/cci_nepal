@@ -47,7 +47,7 @@ def replace_columns_with_number(df, columns, values):
         df[one_column] = one_value
 
 
-def nfri_preferences_to_numbers(df):
+def nfri_preferences_to_binary(df):
     """
     Takes in a dataframe a returns a dataframe with nfri categorical preferences transformed into numbers.
     """
@@ -58,6 +58,21 @@ def nfri_preferences_to_numbers(df):
         "essential (अति आवश्यक) ": 1,
         "desirable (आवश्यक)": 0,
         "unnecessary (अनावश्यक)": 0,
+    }
+    return df.applymap(lambda s: mapping.get(s) if s in mapping else s)
+
+
+def nfri_preferences_to_numbers(df):
+    """
+    Takes in a dataframe a returns a dataframe with nfri categorical preferences transformed into numbers.
+    """
+    mapping = {
+        "essential": 3,
+        "desirable": 2,
+        "unnecessary": 1,
+        "essential (अति आवश्यक) ": 3,
+        "desirable (आवश्यक)": 2,
+        "unnecessary (अनावश्यक)": 1,
     }
     return df.applymap(lambda s: mapping.get(s) if s in mapping else s)
 

@@ -85,8 +85,8 @@ y_val = val[nfri_items]
 
 # %%
 # Preferences to numbers
-y_train = dm.nfri_preferences_to_numbers(y_train)
-y_val = dm.nfri_preferences_to_numbers(y_val)
+y_train = dm.nfri_preferences_to_binary(y_train)
+y_val = dm.nfri_preferences_to_binary(y_val)
 
 # %%
 # Split basic /non basic

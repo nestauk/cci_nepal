@@ -388,7 +388,7 @@ sfs_r2_scores_basic, sfs_r2_scores_non_basic = test_all_models(
     pipes_sfs, "r2", "n_features_to_select", [2, 5, 10, 15, 19]
 )
 sfs_mse_scores_basic, sfs_mse_scores_non_basic = test_all_models(
-    pipes_sfs, "neg_mean_squared_error", "n_features_to_select", [2, 5, 10, 15, 19]
+    pipes_sfs, "neg_mean_squared_error", "n_features_to_select", [2, 5, 10, 15, 17]
 )
 
 # %%

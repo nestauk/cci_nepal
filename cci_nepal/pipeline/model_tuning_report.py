@@ -19,6 +19,7 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import ConfusionMatrixDisplay
 import numpy as np
 import pandas as pd
+import itertools
 import cci_nepal
 
 # Set directory
@@ -106,7 +107,7 @@ def test_all_models(
         "knn__weights": ["uniform", "distance"],
         "knn__p": [1, 2],
     }
-    search_knn = perform_grid_search(pipe_knn, "f1_micro", param_grid_knn)
+    search_knn = perform_grid_search(pipes[1], "f1_micro", param_grid_knn)
     bs_knn_non_basic, bp_knn_non_basic, ftk_knn_non_basic = get_pipeline_results(
         search_knn, y_train_non_basic, X_train
     )
@@ -119,7 +120,7 @@ def test_all_models(
         "selector__" + fs_param_name: fs_params,
         "rf__n_estimators": [10, 50, 100, 200],
     }
-    search_rf = perform_grid_search(pipe_rf, "f1_micro", param_grid_rf)
+    search_rf = perform_grid_search(pipes[2], "f1_micro", param_grid_rf)
     bs_rf_non_basic, bp_rf_non_basic, ftk_rf_non_basic = get_pipeline_results(
         search_rf, y_train_non_basic, X_train
     )
@@ -132,7 +133,7 @@ def test_all_models(
         "selector__" + fs_param_name: fs_params,
         "dt__criterion": ["gini", "entropy"],
     }
-    search_dt = perform_grid_search(pipe_dt, "f1_micro", param_grid_dt)
+    search_dt = perform_grid_search(pipes[3], "f1_micro", param_grid_dt)
     bs_dt_non_basic, bp_dt_non_basic, ftk_dt_non_basic = get_pipeline_results(
         search_dt, y_train_non_basic, X_train
     )
@@ -144,7 +145,7 @@ def test_all_models(
     param_grid_nb = {
         "selector__" + fs_param_name: fs_params,
     }
-    search_nb = perform_grid_search(pipe_nb, "f1_micro", param_grid_nb)
+    search_nb = perform_grid_search(pipes[4], "f1_micro", param_grid_nb)
     bs_nb_non_basic, bp_nb_non_basic, ftk_nb_non_basic = get_pipeline_results(
         search_nb, y_train_non_basic, X_train
     )
@@ -158,7 +159,7 @@ def test_all_models(
         "svm__estimator__C": [1, 2, 3, 4],
         "svm__estimator__gamma": ["scale", "auto"],
     }
-    search_svm = perform_grid_search(pipe_svm, "f1_micro", param_grid_svm)
+    search_svm = perform_grid_search(pipes[5], "f1_micro", param_grid_svm)
     bs_svm_non_basic, bp_svm_non_basic, ftk_svm_non_basic = get_pipeline_results(
         search_svm, y_train_non_basic, X_train
     )

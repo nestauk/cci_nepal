@@ -3,7 +3,7 @@
 # Import libraries
 import pandas as pd
 import numpy as np
-from cci_nepal.pipeline.real_data import nfri_list_file as nlf
+from cci_nepal.pipeline.classification_model import nfri_list_file as nlf
 
 
 def label_transformer(d):
@@ -58,6 +58,21 @@ def nfri_preferences_to_binary(df):
         "essential (अति आवश्यक) ": 1,
         "desirable (आवश्यक)": 0,
         "unnecessary (अनावश्यक)": 0,
+    }
+    return df.applymap(lambda s: mapping.get(s) if s in mapping else s)
+
+
+def nfri_preferences_to_binary_non_essential(df):
+    """
+    Takes in a dataframe a returns a dataframe with nfri categorical preferences transformed into numbers.
+    """
+    mapping = {
+        "essential": 0,
+        "desirable": 0,
+        "unnecessary": 1,
+        "essential (अति आवश्यक) ": 0,
+        "desirable (आवश्यक)": 0,
+        "unnecessary (अनावश्यक)": 1,
     }
     return df.applymap(lambda s: mapping.get(s) if s in mapping else s)
 

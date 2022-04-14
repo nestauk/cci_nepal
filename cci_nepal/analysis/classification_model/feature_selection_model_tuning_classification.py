@@ -44,10 +44,10 @@ import pickle
 
 # Project libraries
 import cci_nepal
-from cci_nepal.getters.real_data import get_real_data as grd
-from cci_nepal.pipeline.real_data import data_manipulation as dm
+from cci_nepal.getters.classification_model import get_real_data as grd
+from cci_nepal.pipeline.classification_model import data_manipulation as dm
 
-from cci_nepal.pipeline import model_tuning_report as mtr
+from cci_nepal.pipeline.classification_model import model_tuning_report as mtr
 
 # %%
 # Set the project directory
@@ -55,8 +55,8 @@ project_dir = cci_nepal.PROJECT_DIR
 
 # %%
 # Read data and feature names
-train = pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/new_data/train.csv")
-val = pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/new_data/val.csv")
+train = grd.read_train_data()
+val = grd.read_val_data()
 column_names = grd.get_lists(f"{project_dir}/cci_nepal/config/column_names.csv")
 select_features = grd.get_lists(f"{project_dir}/cci_nepal/config/select_features.csv")
 
@@ -124,7 +124,7 @@ transformer = ColumnTransformer(
 # Sequential feature selector
 sfs_selector = SequentialFeatureSelector(
     estimator=MultiOutputClassifier(LogisticRegression()),
-    n_features_to_select=18,
+    n_features_to_select=17,
     cv=2,
     direction="backward",
 )

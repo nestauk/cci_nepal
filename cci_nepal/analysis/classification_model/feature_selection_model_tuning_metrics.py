@@ -34,7 +34,6 @@ from sklearn.tree import DecisionTreeRegressor
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.pipeline import Pipeline
 from sklearn.metrics import f1_score
-from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from sklearn.model_selection import GridSearchCV
 import itertools
@@ -186,55 +185,13 @@ def test_all_models(pipes, score, fs_param_name, fs_params):
 
 
 # %%
-def accuracy_per_item(model, nfri_type, test_input, test_output):
-
-    """
-    Takes the test input and output and outputs the accuracy of the Model per NFRI item.
-
-    Parameters:
-
-    model: Trained Machine Learning model
-    nfri_type: Type of NFRI to predict (basic-nfri or non-basic-nfri)
-    test_input: The test set input dataframe
-    test_output: The test set output dataframe
-
-    Returns:
-
-    A pandas dataframe with accuracy per NFRI item
-    """
-
-    if nfri_type == "nfri-basic":
-        nfri_list = basic
-    elif nfri_type == "nfri-non-basic":
-        nfri_list = non_basic
-    else:
-        return print("Please enter the correct nfri type.")
-
-    test_prediction = model.predict(test_input)
-    test_prediction_label = [
-        [dm.numeric_score_transformer(i) for i in nested] for nested in test_prediction
-    ]
-    test_prediction_label_transformed = list(map(list, zip(*test_prediction_label)))
-    accuracy_list = []
-    for i in range(0, len(nfri_list)):
-        accuracy_list.append(
-            accuracy_score(test_prediction_label_transformed[i], test_output.iloc[:, i])
-        )
-
-    return (
-        pd.DataFrame(accuracy_list, test_output.columns, columns=["Accuracy"]),
-        test_prediction_label_transformed,
-    )
-
-
-# %%
 # Set the project directory
 project_dir = cci_nepal.PROJECT_DIR
 
 # %%
 # Read data and feature names
-train = pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/new_data/train.csv")
-val = pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/new_data/val.csv")
+train = grd.read_train_data()
+val = grd.read_val_data()
 column_names = grd.get_lists(f"{project_dir}/cci_nepal/config/column_names.csv")
 select_features = grd.get_lists(f"{project_dir}/cci_nepal/config/select_features.csv")
 

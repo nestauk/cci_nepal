@@ -17,6 +17,10 @@
 # %%
 from sklearn.model_selection import GridSearchCV
 from sklearn.metrics import ConfusionMatrixDisplay
+from sklearn.metrics import f1_score
+from sklearn.metrics import recall_score
+from sklearn.metrics import precision_score
+from sklearn.metrics import accuracy_score
 import numpy as np
 import pandas as pd
 import itertools
@@ -185,6 +189,105 @@ def test_all_models(
         "svm": [bs_svm_non_basic, bp_svm_non_basic, ftk_svm_non_basic],
     }
     return all_scores_basic, all_scores_non_basic
+
+
+# %%
+def accuracy_per_item(model, test_input, test_output):
+
+    """
+    Takes the fitted model, test input and output and outputs the accuracy of the Model per NFRI item.
+
+    Parameters:
+
+    model: Trained Machine Learning model
+    test_input: The test set input dataframe
+    test_output: The test set output dataframe
+
+    Returns:
+
+    A pandas dataframe with accuracy and other evaluation metrics per NFRI item
+    """
+
+    test_prediction = model.predict(test_input)
+    test_prediction_transformed = list(map(list, zip(*test_prediction)))
+    accuracy_list = []
+    for i in range(0, test_output.shape[1]):
+        accuracy_list.append(
+            accuracy_score(test_output.iloc[:, i], test_prediction_transformed[i])
+        )
+
+    f1_list_binary = []
+    for i in range(0, test_output.shape[1]):
+        f1_list_binary.append(
+            f1_score(
+                test_output.iloc[:, i], test_prediction_transformed[i], average="binary"
+            )
+        )
+
+    f1_list_macro = []
+    for i in range(0, test_output.shape[1]):
+        f1_list_macro.append(
+            f1_score(
+                test_output.iloc[:, i], test_prediction_transformed[i], average="macro"
+            )
+        )
+
+    f1_list_micro = []
+    for i in range(0, test_output.shape[1]):
+        f1_list_micro.append(
+            f1_score(
+                test_output.iloc[:, i], test_prediction_transformed[i], average="micro"
+            )
+        )
+
+    f1_list_weighted = []
+    for i in range(0, test_output.shape[1]):
+        f1_list_weighted.append(
+            f1_score(
+                test_output.iloc[:, i],
+                test_prediction_transformed[i],
+                average="weighted",
+            )
+        )
+
+    recall_list = []
+    for i in range(0, test_output.shape[1]):
+        recall_list.append(
+            recall_score(test_output.iloc[:, i], test_prediction_transformed[i])
+        )
+
+    precision_list = []
+    for i in range(0, test_output.shape[1]):
+        precision_list.append(
+            precision_score(test_output.iloc[:, i], test_prediction_transformed[i])
+        )
+
+    scores_dataframe = pd.DataFrame(
+        list(
+            zip(
+                accuracy_list,
+                f1_list_binary,
+                f1_list_macro,
+                f1_list_micro,
+                f1_list_weighted,
+                recall_list,
+                precision_list,
+            )
+        ),
+        columns=[
+            "Accuracy",
+            "F1_Score_Binary",
+            "F1_Score_Macro",
+            "F1_Score_Micro",
+            "F1_Score_Weighted",
+            "Recall",
+            "Precision",
+        ],
+    )
+    scores_dataframe.loc[len(scores_dataframe)] = scores_dataframe.mean(axis=0)
+    scores_index = test_output.columns.append(pd.Index(["Average"]))
+    scores_dataframe = scores_dataframe.set_index(scores_index)
+    return scores_dataframe
 
 
 # %%

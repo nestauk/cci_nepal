@@ -291,5 +291,18 @@ def accuracy_per_item(model, test_input, test_output):
 
 
 # %%
-
-# %%
+def create_predictions_files(y_pred, nfri_list, X_test, cols_to_include):
+    """
+    Create files of predictions and input features for basic and non-basic.
+    """
+    pred = pd.DataFrame(y_pred, columns=nfri_list)
+    pred_df = pd.concat(
+        [
+            X_test[X_test.columns[X_test.columns.isin(cols_to_include)]].reset_index(
+                drop=True
+            ),
+            pred,
+        ],
+        axis=1,
+    )
+    return pred_df

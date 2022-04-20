@@ -22,7 +22,6 @@
 # Import libraries
 import pandas as pd
 import numpy as np
-from matplotlib import pyplot as plt
 from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 from sklearn.preprocessing import RobustScaler
@@ -61,6 +60,7 @@ column_names = grd.get_lists(f"{project_dir}/cci_nepal/config/column_names.csv")
 select_features = grd.get_lists(f"{project_dir}/cci_nepal/config/select_features.csv")
 
 # %%
+# Lowercase values
 train = train.applymap(lambda s: s.lower() if type(s) == str else s)
 val = val.applymap(lambda s: s.lower() if type(s) == str else s)
 
@@ -131,7 +131,6 @@ sfs_selector = SequentialFeatureSelector(
 
 # %%
 # Models
-# To note: solver='liblinear' - research solvers for best option
 logr = MultiOutputClassifier(LogisticRegression(solver="liblinear"))
 knn = KNeighborsClassifier(n_neighbors=5)
 rf = RandomForestClassifier(random_state=1)
@@ -166,11 +165,14 @@ pipe_svm = Pipeline(
 )  # SVM
 
 # %%
+# Save pipes to list
 pipes = [pipe_lr, pipe_knn, pipe_rf, pipe_dt, pipe_nb, pipe_svm]
 
 # %%
+# Running test_all_models function to get results
+# To note: this can take a long time to run
 # %%capture
-f1_scores_basic, f1_scores_non_basic = mtr.test_all_models(
+results_basic, results_non_basic = mtr.test_all_models(
     pipes,
     "f1_micro",
     "n_features_to_select",
@@ -181,10 +183,14 @@ f1_scores_basic, f1_scores_non_basic = mtr.test_all_models(
 )
 
 # %%
+# Save results to outputs/data/model_results
 with open(
-    f"{project_dir}/outputs/data/model_results/f1_scores_non_basic.pkl", "wb"
+    f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic.pkl",
+    "wb",
 ) as f:
-    pickle.dump(f1_scores_non_basic, f)
+    pickle.dump(results_non_basic, f)
 
-with open(f"{project_dir}/outputs/data/model_results/f1_scores_basic.pkl", "wb") as f:
-    pickle.dump(f1_scores_basic, f)
+with open(
+    f"{project_dir}/outputs/data/model_results/features_params_scores_basic.pkl", "wb"
+) as f:
+    pickle.dump(results_basic, f)

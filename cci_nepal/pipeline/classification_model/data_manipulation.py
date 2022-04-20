@@ -120,8 +120,15 @@ def transform_sets(df, column_names):
         "brickets with ciment",
     ]
     df.loc[
-        df.Material_Other.isin(cemment_with_bricks), "house_material"
+        df.Material_Other.isin(cemment_with_bricks), "House_Material"
     ] = "cement bonded bricks/stone"
+
+    df["House_Material"] = np.where(
+        df.Material_Other.str.contains("mato ghar|clay|mato|mud", case=False),
+        "clay",
+        df["House_Material"],
+    )
+
     df.drop(["Material_Other", "Ethnicity_Others"], axis=1, inplace=True)
     df.fillna(0, inplace=True)
     df["Respondent_Age"] = df["Respondent_Age"].astype(str).map(lambda x: x.strip())

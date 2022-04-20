@@ -45,7 +45,6 @@ import pickle
 import cci_nepal
 from cci_nepal.getters.classification_model import get_real_data as grd
 from cci_nepal.pipeline.classification_model import data_manipulation as dm
-
 from cci_nepal.pipeline.classification_model import model_tuning_report as mtr
 
 # %%
@@ -98,26 +97,7 @@ y_val_non_basic = y_val[non_basic]
 
 # %%
 # Define the transformations to be made
-transformer = ColumnTransformer(
-    transformers=[
-        (
-            "rob_scaler",
-            RobustScaler(),
-            [
-                "household_size",
-                "percent_female",
-                "income_gen_ratio",
-                "income_gen_adults",
-            ],
-        ),
-        (
-            "one_hot",
-            OneHotEncoder(drop="first", handle_unknown="ignore"),
-            ["Ethnicity", "House_Material"],
-        ),
-    ],
-    remainder="passthrough",
-)
+transformer = mtr.col_transformer()
 
 # %%
 # %%capture

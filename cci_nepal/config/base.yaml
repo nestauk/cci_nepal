@@ -16,3 +16,5 @@ final_model:
     ]
   non_basic_model_features: ["remainder__children", "remainder__sindupalchowk"]
   solver: "liblinear"
+  penalty_basic: "l2"
+  penalty_non_basic: "l2"

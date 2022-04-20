@@ -37,6 +37,7 @@ import pickle
 
 # Project libraries
 import cci_nepal
+from cci_nepal.pipeline.classification_model import model_tuning_report as mtr
 from cci_nepal.getters.classification_model import get_real_data as grd
 from cci_nepal.pipeline.classification_model import data_manipulation as dm
 from cci_nepal import config
@@ -57,6 +58,8 @@ select_features = grd.get_lists(f"{project_dir}/cci_nepal/config/select_features
 b_features = config["final_model"]["basic_model_features"]
 nb_features = config["final_model"]["non_basic_model_features"]
 lr_solver = config["final_model"]["solver"]
+b_penalty = config["final_model"]["penalty_basic"]
+nb_penalty = config["final_model"]["penalty_non_basic"]
 
 # %%
 # Combine training and validation sets
@@ -94,30 +97,14 @@ y_train_non_basic = y_train[non_basic]
 
 # %%
 # Define the transformations to be made
-transformer = ColumnTransformer(
-    transformers=[
-        (
-            "rob_scaler",
-            RobustScaler(),
-            [
-                "household_size",
-                "percent_female",
-                "income_gen_ratio",
-                "income_gen_adults",
-            ],
-        ),
-        (
-            "one_hot",
-            OneHotEncoder(drop="first", handle_unknown="ignore"),
-            ["Ethnicity", "House_Material"],
-        ),
-    ],
-    remainder="passthrough",
-)
+transformer = mtr.col_transformer()
 
 # %%
 # Best performing model
-logr = MultiOutputClassifier(LogisticRegression(solver=lr_solver))
+logr_b = MultiOutputClassifier(LogisticRegression(solver=lr_solver, penalty=b_penalty))
+logr_nb = MultiOutputClassifier(
+    LogisticRegression(solver=lr_solver, penalty=nb_penalty)
+)
 
 # %%
 # Apply column transformer
@@ -134,13 +121,13 @@ X_train_non_basic = X_train[nb_features].copy()
 
 # %%
 # Fit model
-basic_model = logr.fit(X_train_basic, y_train_basic)
+basic_model = logr_b.fit(X_train_basic, y_train_basic)
 # Save model to disk
 filename = f"{project_dir}/outputs/models/final_classification_model_basic.sav"
 pickle.dump(basic_model, open(filename, "wb"))
 
 # Fit model
-non_basic_model = logr.fit(X_train_non_basic, y_train_non_basic)
+non_basic_model = logr_nb.fit(X_train_non_basic, y_train_non_basic)
 # Save model to disk
 filename = f"{project_dir}/outputs/models/final_classification_model_non_basic.sav"
 pickle.dump(non_basic_model, open(filename, "wb"))

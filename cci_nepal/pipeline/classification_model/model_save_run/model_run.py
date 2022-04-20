@@ -81,26 +81,7 @@ X_test = test[select_features]
 
 # %%
 # Define the transformations to be made
-transformer = ColumnTransformer(
-    transformers=[
-        (
-            "rob_scaler",
-            RobustScaler(),
-            [
-                "household_size",
-                "percent_female",
-                "income_gen_ratio",
-                "income_gen_adults",
-            ],
-        ),
-        (
-            "one_hot",
-            OneHotEncoder(drop="first", handle_unknown="ignore"),
-            ["Ethnicity", "House_Material"],
-        ),
-    ],
-    remainder="passthrough",
-)
+transformer = mtr.col_transformer()
 
 # %%
 # Apply column transformer

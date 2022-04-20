@@ -24,6 +24,13 @@ from sklearn.metrics import accuracy_score
 import numpy as np
 import pandas as pd
 import itertools
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import RobustScaler
+from sklearn.metrics import multilabel_confusion_matrix, ConfusionMatrixDisplay
+import matplotlib.pyplot as plt
+
+# Project libraries
 import cci_nepal
 
 # Set directory
@@ -306,3 +313,55 @@ def create_predictions_files(y_pred, nfri_list, X_test, cols_to_include):
         axis=1,
     )
     return pred_df
+
+
+# %%
+def col_transformer():
+    """
+    Define the column transformations to be made
+    """
+    transformer = ColumnTransformer(
+        transformers=[
+            (
+                "rob_scaler",
+                RobustScaler(),
+                [
+                    "household_size",
+                    "percent_female",
+                    "income_gen_ratio",
+                    "income_gen_adults",
+                ],
+            ),
+            (
+                "one_hot",
+                OneHotEncoder(drop="first", handle_unknown="ignore"),
+                ["Ethnicity", "House_Material"],
+            ),
+        ],
+        remainder="passthrough",
+    )
+    return transformer
+
+
+# %%
+def save_cm_plots(cm, model_type, items):
+    """
+    Save cm plot for each item for chosen model type. Note: model type needs to match folder name in outputs/figures.
+    """
+    # Loop through items and save cm plot to outputs/figures sub-folder.
+    for i in range(0, len(items)):
+        disp = ConfusionMatrixDisplay(confusion_matrix=cm[i])
+        disp.plot()
+        plt.title(items[i].replace("_", " "), pad=20)
+        plt.tight_layout()
+        plt.savefig(
+            f"{project_directory}/outputs/figures/cm/"
+            + model_type
+            + "/"
+            + items[i]
+            + "_cm.png",
+            bbox_inches="tight",
+        )
+
+
+# %%

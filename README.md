@@ -75,7 +75,7 @@ With the above in mind and with the aim of the model producing results that woul
 
 In choosing the optimum model type and features for each basic and non-basic item groups, we Sklearns pipeline feature and Gridsearch to test different feature numbers, model types and hyper-paramters. The script to run these tests is stored in `cci_nepal/analysis/model_development/` and is called `model_development.py`.
 
-After the feature selection and model tuning stage, the best performing model is run on the test set and a series of metrics are produced across items to evaluate its performace. These include - confusion matrix plots (saved in `outputs/figures/cm`, accuracy, micro F1, sensitivity and specificity.
+After the feature selection and model tuning stage, the best performing model is run on the test set and a series of metrics are produced across items to evaluate its performace. These include - confusion matrix plots (saved in `outputs/figures/cm`, accuracy, micro F1, sensitivity and specificity. These scripts to produce these results are in `cci_nepal/analysis/model_reporting`.
 
 ### Free text analysis
 

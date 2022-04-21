@@ -1,5 +1,3 @@
-<!-- #region -->
-
 # Collective Crisis Intelligence Project for The Nepal Red Cross
 
 ## Contents
@@ -42,9 +40,7 @@ This project uses new data collected from surveying x2 district () to understand
 
 The NFRI predict prototype takes in demographic information on a household such as the district they are from, the number of members of the household and if they have children and outputs the list of NFRI items with their predicted likelihood of being essential to that household (0 to 1 score) in a flood crisis. Figure 1 depicts the steps of the tool from input to predictions.
 
-<!-- #endregion -->
-
-<img src="outputs/figures/readme/how_the_model_works.png" width="500" align="left">
+<img src="outputs/figures/readme/how_the_model_works.png" width="500">
 
 Figure 1: Overview of the prototype
 
@@ -55,8 +51,6 @@ Figure 2 summarises the steps in the model workflow.
 ![Figure 2](outputs/figures/readme/model_workflow.png)
 
 Figure 2: Model workflow
-
-<!-- #region -->
 
 ### Data Preprocessing
 
@@ -82,8 +76,6 @@ With the above in mind and with the aim of the model producing results that woul
 In choosing the optimum model type and features for each basic and non-basic item groups, we Sklearns pipeline feature and Gridsearch to test different feature numbers, model types and hyper-paramters. The script to run these tests is stored in `cci_nepal/analysis/model_development/` and is called `model_development.py`.
 
 After the feature selection and model tuning stage, the best performing model is run on the test set and a series of metrics are produced across items to evaluate its performace. These include - confusion matrix plots (saved in `outputs/figures/cm`, accuracy, micro F1, sensitivity and specificity.
-
-<!-- #endregion -->
 
 ### Free text analysis
 

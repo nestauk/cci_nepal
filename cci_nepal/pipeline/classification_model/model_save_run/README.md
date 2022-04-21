@@ -38,4 +38,4 @@ There are two files created from running the models and saved to outputs:
 - `basic_test_predictions.xlsx`
 - `non_basic_test_predictions.xlsx`
 
-These contain the survey inputs and predictions for each basic and non-basic NFRI items respectively. The format of each file will be slighlty different as different numbers of features are used and the NFRI outputs are different. The first set of columns will contain the feature names and the next set will contain the NFRI items with 0 or 1 as to whether they are predicted as essential or not essential.
+These contain the survey inputs and predictions for each basic and non-basic NFRI items respectively. The format of each file will be slighlty different as different numbers of features are used and the NFRI outputs are different. The first set of columns will contain the feature names and the next set will contain the NFRI items with a 0 to 1 probability as to whether they are the item is essential.

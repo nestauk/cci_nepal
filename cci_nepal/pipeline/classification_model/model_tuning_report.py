@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.13.6
+#       jupytext_version: 1.13.2
 #   kernelspec:
 #     display_name: cci_nepal
 #     language: python
@@ -302,17 +302,22 @@ def create_predictions_files(y_pred, nfri_list, X_test, cols_to_include):
     """
     Create files of predictions and input features for basic and non-basic.
     """
-    pred = pd.DataFrame(y_pred, columns=nfri_list)
-    pred_df = pd.concat(
+    pred_lists = []
+    for preds in y_pred:
+        pred_list = list(pd.DataFrame(preds)[1])
+        pred_lists.append(pred_list)
+    pred_df = pd.DataFrame(np.column_stack(pred_lists), columns=nfri_list)
+
+    input_pred_df = pd.concat(
         [
             X_test[X_test.columns[X_test.columns.isin(cols_to_include)]].reset_index(
                 drop=True
             ),
-            pred,
+            pred_df,
         ],
         axis=1,
     )
-    return pred_df
+    return input_pred_df
 
 
 # %%

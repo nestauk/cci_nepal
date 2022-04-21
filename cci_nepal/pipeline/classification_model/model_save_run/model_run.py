@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.13.6
+#       jupytext_version: 1.13.2
 #   kernelspec:
 #     display_name: cci_nepal
 #     language: python
@@ -110,8 +110,8 @@ non_basic_model = pickle.load(
 
 # %%
 # Predict on test set
-y_pred_basic = basic_model.predict(X_test_basic)
-y_pred_non_basic = non_basic_model.predict(X_test_non_basic)
+y_pred_basic = basic_model.predict_proba(X_test_basic)
+y_pred_non_basic = non_basic_model.predict_proba(X_test_non_basic)
 
 # %%
 # Items, basic and non-basic divide

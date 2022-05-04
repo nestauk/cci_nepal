@@ -124,7 +124,7 @@ def transform_sets(df, column_names):
     ] = "cement bonded bricks/stone"
 
     df["House_Material"] = np.where(
-        df.Material_Other.str.contains("mato ghar|clay|mato|mud", case=False),
+        df.Material_Other.str.contains("mato ghar|clay|mato|mud", case=False, na=False),
         "clay",
         df["House_Material"],
     )
@@ -168,7 +168,5 @@ def feature_creation(df):
     df.income_gen_adults = df.income_gen_adults.replace(np.inf, np.nan)
     df.fillna(0, inplace=True)
 
-
-# %%
 
 # %%

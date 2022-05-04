@@ -38,7 +38,7 @@ import pickle
 # Project libraries
 import cci_nepal
 from cci_nepal.pipeline.classification_model import model_tuning_report as mtr
-from cci_nepal.getters.classification_model import get_real_data as grd
+from cci_nepal.getters.classification_model import get_data as grd
 from cci_nepal.pipeline.classification_model import data_manipulation as dm
 from cci_nepal import config
 
@@ -52,6 +52,9 @@ train = grd.read_train_data()
 val = grd.read_val_data()
 column_names = grd.get_lists(f"{project_dir}/cci_nepal/config/column_names.csv")
 select_features = grd.get_lists(f"{project_dir}/cci_nepal/config/select_features.csv")
+
+# %%
+train.shape
 
 # %%
 # Get parameters from config file
@@ -75,6 +78,9 @@ train = train.applymap(lambda s: s.lower() if type(s) == str else s)
 nfri_items = column_names[37:]
 basic = nfri_items[0:11]
 non_basic = nfri_items[11:]
+
+# %%
+train.shape
 
 # %%
 # Data transformations and feature creation

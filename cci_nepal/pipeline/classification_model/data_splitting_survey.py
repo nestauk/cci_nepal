@@ -23,20 +23,22 @@ import warnings
 from sklearn.utils import shuffle
 
 warnings.filterwarnings("ignore")
-from cci_nepal.getters.real_data import get_real_data as grd
+from cci_nepal.getters.classification_model import get_data as grd
 
 # Set project directory
 project_dir = cci_nepal.PROJECT_DIR
 
 # Read in df
-df = grd.read_csv_file(f"{project_dir}/inputs/data/real_data/Full_Data_District.csv")
+df = grd.read_excel_file(f"{project_dir}/inputs/data/survey_data.xlsx")
 
 # Sort to ensure the order is consistent each time before splitting
 df.sort_values(by="_index", inplace=True)
 
 df["District"].value_counts()
 
-df_hill = df[df["District"] == "Sindupalchowk"]
+df.shape
+
+df_hill = df[df["District"] == "Sindupalchok"]
 df_terai = df[df["District"] == "Mahottari"]
 print(df_hill.shape)
 print(df_terai.shape)
@@ -74,6 +76,8 @@ val = pd.concat([val_hill, val_terai], ignore_index=True)
 train = shuffle(train, random_state=1)
 # Re-shuffle sets
 val = shuffle(val, random_state=1)
+
+train.shape
 
 # Save train and val sets
 train.to_csv(f"{project_dir}/outputs/data/data_for_modelling/train.csv", index=False)

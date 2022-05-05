@@ -16,3 +16,4 @@ geopandas
 geopy
 geocoder
 pickle
+openpyxl

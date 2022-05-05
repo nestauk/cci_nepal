@@ -43,7 +43,7 @@ import pickle
 
 # Project libraries
 import cci_nepal
-from cci_nepal.getters.classification_model import get_real_data as grd
+from cci_nepal.getters.classification_model import get_data as grd
 from cci_nepal.pipeline.classification_model import data_manipulation as dm
 from cci_nepal.pipeline.classification_model import model_tuning_report as mtr
 
@@ -151,12 +151,12 @@ pipes = [pipe_lr, pipe_knn, pipe_rf, pipe_dt, pipe_nb, pipe_svm]
 # %%
 # Running test_all_models function to get results
 # To note: this can take a long time to run
-# %%capture
+# #%%capture
 results_basic, results_non_basic = mtr.test_all_models(
     pipes,
     "f1_micro",
     "n_features_to_select",
-    [2, 5, 10, 15, 17],
+    [2, 5],
     X_train,
     y_train_basic,
     y_train_non_basic,
@@ -165,12 +165,13 @@ results_basic, results_non_basic = mtr.test_all_models(
 # %%
 # Save results to outputs/data/model_results
 with open(
-    f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic.pkl",
+    f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic_reduced_features.pkl",
     "wb",
 ) as f:
     pickle.dump(results_non_basic, f)
 
 with open(
-    f"{project_dir}/outputs/data/model_results/features_params_scores_basic.pkl", "wb"
+    f"{project_dir}/outputs/data/model_results/features_params_scores_basic_reduced_features.pkl",
+    "wb",
 ) as f:
     pickle.dump(results_basic, f)

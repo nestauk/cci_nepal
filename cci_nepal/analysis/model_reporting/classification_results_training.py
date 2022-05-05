@@ -35,6 +35,14 @@ non_basic_results_train = pd.read_pickle(
     f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic.pkl"
 )
 
+# %%
+basic_results_train = pd.read_pickle(
+    f"{project_dir}/outputs/data/model_results/features_params_scores_basic_reduced_features.pkl"
+)
+non_basic_results_train = pd.read_pickle(
+    f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic_reduced_features.pkl"
+)
+
 # %% [markdown]
 # ### Basic
 
@@ -42,7 +50,9 @@ non_basic_results_train = pd.read_pickle(
 basic_results_train
 
 # %%
-n_features_use = [17, 17, 2, 2, 2, 17]
+# n_features_use = [17, 17, 2, 2, 2, 17]
+
+n_features_use = [5, 5, 5, 5, 2, 5]
 
 # %%
 models = []
@@ -92,7 +102,7 @@ plt.show()
 non_basic_results_train
 
 # %%
-n_features_use = [2, 17, 2, 2, 2, 17]
+n_features_use = [5, 5, 5, 2, 2, 5]
 
 # %%
 models = []
@@ -107,7 +117,7 @@ for model in non_basic_results_train:
 plt.style.use("ggplot")
 
 x_pos = [i for i, _ in enumerate(models)]
-plt.ylim(ymin=0.9, ymax=0.95)
+plt.ylim(ymin=0.9, ymax=0.91)
 
 plt.bar(x_pos, f1_scores, color="green")
 plt.xlabel("Models")
@@ -135,3 +145,5 @@ plt.title("Non-basic model: Optimum number of features to use per model", pad=20
 plt.xticks(x_pos, models)
 
 plt.show()
+
+# %%

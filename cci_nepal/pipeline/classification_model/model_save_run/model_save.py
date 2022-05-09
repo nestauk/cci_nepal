@@ -34,6 +34,7 @@ from sklearn.preprocessing import RobustScaler
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.linear_model import LogisticRegression
 import pickle
+from pathlib import Path
 
 # Project libraries
 import cci_nepal
@@ -124,6 +125,10 @@ X_train = pd.DataFrame(X_train, columns=list(transformer.get_feature_names_out()
 # Reduce to just chosen features for basic and non-basic
 X_train_basic = X_train[b_features].copy()
 X_train_non_basic = X_train[nb_features].copy()
+
+# %%
+# Add folder if not already created
+Path(f"{project_dir}/outputs/models/").mkdir(parents=True, exist_ok=True)
 
 # %%
 # Fit model

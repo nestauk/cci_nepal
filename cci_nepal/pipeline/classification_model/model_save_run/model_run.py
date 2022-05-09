@@ -7,7 +7,7 @@
 #       extension: .py
 #       format_name: percent
 #       format_version: '1.3'
-#       jupytext_version: 1.13.2
+#       jupytext_version: 1.13.6
 #   kernelspec:
 #     display_name: cci_nepal
 #     language: python
@@ -37,10 +37,11 @@ from sklearn.preprocessing import RobustScaler
 from sklearn.multioutput import MultiOutputClassifier
 from sklearn.linear_model import LogisticRegression
 import pickle
+from pathlib import Path
 
 # Project libraries
 import cci_nepal
-from cci_nepal.getters.classification_model import get_real_data as grd
+from cci_nepal.getters.classification_model import get_data as grd
 from cci_nepal.pipeline.classification_model import data_manipulation as dm
 from cci_nepal.pipeline.classification_model import model_tuning_report as mtr
 from cci_nepal import config
@@ -97,6 +98,10 @@ X_test_transform = pd.DataFrame(
 # Reduce to just chosen features for basic and non-basic
 X_test_basic = X_test_transform[b_features].copy()
 X_test_non_basic = X_test_transform[nb_features].copy()
+
+# %%
+# Add folder if not already created
+Path(f"{project_dir}/outputs/models/").mkdir(parents=True, exist_ok=True)
 
 # %%
 # Loading models (best performing)

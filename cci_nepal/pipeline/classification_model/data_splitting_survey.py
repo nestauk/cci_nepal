@@ -21,6 +21,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 import warnings
 from sklearn.utils import shuffle
+from pathlib import Path
 
 warnings.filterwarnings("ignore")
 from cci_nepal.getters.classification_model import get_data as grd
@@ -50,6 +51,11 @@ print(train_hill.shape)
 print(test_hill.shape)
 print(train_terai.shape)
 print(test_terai.shape)
+
+# Add folder if not already created
+Path(f"{project_dir}/outputs/data/data_for_modelling/").mkdir(
+    parents=True, exist_ok=True
+)
 
 # Write into csv files
 train_hill.to_csv(

@@ -28,31 +28,32 @@ import cci_nepal
 project_dir = cci_nepal.PROJECT_DIR
 
 # %%
-basic_results_train = pd.read_pickle(
-    f"{project_dir}/outputs/data/model_results/features_params_scores_basic.pkl"
-)
-non_basic_results_train = pd.read_pickle(
-    f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic.pkl"
-)
+# basic_results_train = pd.read_pickle(
+#    f"{project_dir}/outputs/data/model_results/features_params_scores_basic.pkl"
+# )
+# non_basic_results_train = pd.read_pickle(
+# f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic.pkl"
+# )
 
 # %%
 basic_results_train = pd.read_pickle(
-    f"{project_dir}/outputs/data/model_results/features_params_scores_basic_reduced_features.pkl"
+    f"{project_dir}/outputs/data/model_results/features_params_scores_basic_filtered_features.pkl"
 )
 non_basic_results_train = pd.read_pickle(
-    f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic_reduced_features.pkl"
+    f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic_filtered_features.pkl"
 )
 
 # %% [markdown]
 # ### Basic
 
 # %%
-basic_results_train
+print("The following are the basic_result_train scores:")
+print(basic_results_train)
 
 # %%
 # n_features_use = [17, 17, 2, 2, 2, 17]
 
-n_features_use = [5, 5, 5, 5, 2, 5]
+# n_features_use = [5, 5, 5, 5, 2, 5]
 
 # %%
 models = []
@@ -82,27 +83,28 @@ plt.show()
 
 # %%
 # %matplotlib inline
-plt.style.use("ggplot")
+# plt.style.use("ggplot")
 
-x_pos = [i for i, _ in enumerate(models)]
+# x_pos = [i for i, _ in enumerate(models)]
 
-plt.bar(x_pos, n_features_use, color="green")
-plt.xlabel("Models")
-plt.ylabel("Number of features")
-plt.title("Basic model: Optimum number of features to use per model", pad=20)
+# plt.bar(x_pos, color="green")
+# plt.xlabel("Models")
+# plt.ylabel("Number of features")
+# plt.title("Basic model: Optimum number of features to use per model", pad=20)
 
-plt.xticks(x_pos, models)
+# plt.xticks(x_pos, models)
 
-plt.show()
+# plt.show()
 
 # %% [markdown]
 # ### Non-basic
 
 # %%
-non_basic_results_train
+print("The following are the non_basic_result_train scores:")
+print(non_basic_results_train)
 
 # %%
-n_features_use = [5, 5, 5, 2, 2, 5]
+# n_features_use = [5, 5, 5, 2, 2, 5]
 
 # %%
 models = []
@@ -133,17 +135,17 @@ plt.show()
 
 # %%
 # %matplotlib inline
-plt.style.use("ggplot")
+# plt.style.use("ggplot")
 
-x_pos = [i for i, _ in enumerate(models)]
+# x_pos = [i for i, _ in enumerate(models)]
 
-plt.bar(x_pos, n_features_use, color="green")
-plt.xlabel("Models")
-plt.ylabel("Number of features")
-plt.title("Non-basic model: Optimum number of features to use per model", pad=20)
+# plt.bar(x_pos, color="green")
+# plt.xlabel("Models")
+# plt.ylabel("Number of features")
+# plt.title("Non-basic model: Optimum number of features to use per model", pad=20)
 
-plt.xticks(x_pos, models)
+# plt.xticks(x_pos, models)
 
-plt.show()
+# plt.show()
 
 # %%

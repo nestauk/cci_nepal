@@ -129,7 +129,11 @@ def transform_sets(df, column_names):
         df["House_Material"],
     )
 
-    df.drop(["Material_Other", "Ethnicity_Others"], axis=1, inplace=True)
+    df.drop(
+        ["Material_Other", "Previous_NFRI", "Ethnicity", "Ethnicity_Others"],
+        axis=1,
+        inplace=True,
+    )
     df.fillna(0, inplace=True)
     df["Respondent_Age"] = df["Respondent_Age"].astype(str).map(lambda x: x.strip())
 
@@ -142,30 +146,30 @@ def feature_creation(df):
     df.drop(["total_female"], axis=1, inplace=True)
     df.insert(4, "children", df.iloc[:, [7, 8, 9, 17, 18, 19]].sum(axis=1))
     df["children"] = np.where(df.children > 0, 1, 0)
-    df.insert(5, "children_under_5", df.iloc[:, [8, 18]].sum(axis=1))
-    df["children_under_5"] = np.where(df.children_under_5 > 0, 1, 0)
+    # df.insert(5, "children_under_5", df.iloc[:, [8, 18]].sum(axis=1))
+    # df["children_under_5"] = np.where(df.children_under_5 > 0, 1, 0)
+    # df.insert(
+    #    6,
+    # "adults",
+    # df.iloc[:, [12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28]].sum(
+    #    axis=1
+    # ),
+    # )
     df.insert(
-        6,
-        "adults",
-        df.iloc[:, [12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28]].sum(
-            axis=1
-        ),
-    )
-    df.insert(
-        7,
+        5,
         "income_gen_ratio",
         ((df.Income_Generating_Members / df.household_size) * 100),
     )
-    df.insert(
-        8, "income_gen_adults", ((df.Income_Generating_Members / df.adults) * 100)
-    )
-    df.insert(9, "health_difficulty", df.iloc[:, [33, 34, 35, 36, 37, 38]].sum(axis=1))
+    # df.insert(
+    # 8, "income_gen_adults", ((df.Income_Generating_Members / df.adults) * 100)
+    # )
+    df.insert(6, "health_difficulty", df.iloc[:, [33, 34, 35, 36, 37, 38]].sum(axis=1))
     df.health_difficulty = np.where(df.health_difficulty > 0, 1, 0)
     df["respondent_female"] = np.where(df.Respondent_Gender == "female", 1, 0)
-    df["previous_nfri"] = np.where(df.Previous_NFRI == "yes", 1, 0)
+    # df["previous_nfri"] = np.where(df.Previous_NFRI == "yes", 1, 0)
     df["sindupalchowk"] = np.where(df.District == "sindupalchok", 1, 0)
     df.income_gen_ratio = df.income_gen_ratio.replace(np.inf, np.nan)
-    df.income_gen_adults = df.income_gen_adults.replace(np.inf, np.nan)
+    # df.income_gen_adults = df.income_gen_adults.replace(np.inf, np.nan)
     df.fillna(0, inplace=True)
 
 

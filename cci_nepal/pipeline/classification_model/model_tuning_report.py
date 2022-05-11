@@ -78,29 +78,27 @@ def get_pipeline_results(search, y_type, X_train):
             one_hot_feats,
             [
                 "children",
-                "children_under_5",
+                # "children_under_5",
                 "health_difficulty",
-                "previous_nfri",
+                # "previous_nfri",
                 "sindupalchowk",
             ],
         )
     )
-    index_keep = list(search.best_estimator_.named_steps["selector"].get_support(True))
-    features_to_keep = [features[i] for i in index_keep]
-    return best_score, best_params, features_to_keep
+    # index_keep = list(search.best_estimator_.named_steps["selector"].get_support(True))
+    # features_to_keep = [features[i] for i in index_keep]
+    return best_score, best_params, features
 
 
 # %%
-def test_all_models(
-    pipes, score, fs_param_name, fs_params, X_train, y_train_basic, y_train_non_basic
-):
+def test_all_models(pipes, score, X_train, y_train_basic, y_train_non_basic):
     """
     Run pipelines for all models based on different scores and feature selection methods.
     """
 
     # Logistic regression
     param_grid_lr = {
-        "selector__" + fs_param_name: fs_params,
+        # "selector__" + fs_param_name: fs_params,
         "logistic__estimator__penalty": ["l1", "l2"],
     }
     search_lr = perform_grid_search(pipes[0], "f1_micro", param_grid_lr)
@@ -113,7 +111,7 @@ def test_all_models(
 
     # KNN
     param_grid_knn = {
-        "selector__" + fs_param_name: fs_params,
+        # "selector__" + fs_param_name: fs_params,
         "knn__n_neighbors": [2, 5, 10, 50],
         "knn__weights": ["uniform", "distance"],
         "knn__p": [1, 2],
@@ -128,7 +126,7 @@ def test_all_models(
 
     # RF
     param_grid_rf = {
-        "selector__" + fs_param_name: fs_params,
+        # "selector__" + fs_param_name: fs_params,
         "rf__n_estimators": [10, 50, 100, 200],
     }
     search_rf = perform_grid_search(pipes[2], "f1_micro", param_grid_rf)
@@ -141,7 +139,7 @@ def test_all_models(
 
     # DT
     param_grid_dt = {
-        "selector__" + fs_param_name: fs_params,
+        # "selector__" + fs_param_name: fs_params,
         "dt__criterion": ["gini", "entropy"],
     }
     search_dt = perform_grid_search(pipes[3], "f1_micro", param_grid_dt)
@@ -154,7 +152,7 @@ def test_all_models(
 
     # NB
     param_grid_nb = {
-        "selector__" + fs_param_name: fs_params,
+        # "selector__" + fs_param_name: fs_params,
     }
     search_nb = perform_grid_search(pipes[4], "f1_micro", param_grid_nb)
     bs_nb_non_basic, bp_nb_non_basic, ftk_nb_non_basic = get_pipeline_results(
@@ -166,7 +164,7 @@ def test_all_models(
 
     # SVM
     param_grid_svm = {
-        "selector__" + fs_param_name: fs_params,
+        # "selector__" + fs_param_name: fs_params,
         "svm__estimator__C": [1, 2, 3, 4],
         "svm__estimator__gamma": ["scale", "auto"],
     }
@@ -321,7 +319,7 @@ def create_predictions_files(y_pred, nfri_list, X_test, cols_to_include):
 
 
 # %%
-def col_transformer():
+def col_transformer(dummy_col):
     """
     Define the column transformations to be made
     """
@@ -334,13 +332,14 @@ def col_transformer():
                     "household_size",
                     "percent_female",
                     "income_gen_ratio",
-                    "income_gen_adults",
+                    # "income_gen_adults",
                 ],
             ),
             (
                 "one_hot",
-                OneHotEncoder(drop="first", handle_unknown="ignore"),
-                ["Ethnicity", "House_Material"],
+                OneHotEncoder(drop=dummy_col, handle_unknown="ignore"),
+                # ["Ethnicity", "House_Material"],# Ethnicity removed
+                ["House_Material"],
             ),
         ],
         remainder="passthrough",

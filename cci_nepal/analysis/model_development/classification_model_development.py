@@ -57,17 +57,25 @@ train = grd.read_train_data()
 val = grd.read_val_data()
 column_names = grd.get_lists(f"{project_dir}/cci_nepal/config/column_names.csv")
 select_features = grd.get_lists(f"{project_dir}/cci_nepal/config/select_features.csv")
+print("Selected features are:")
+print(select_features)
 
 # %%
 # Lowercase values
 train = train.applymap(lambda s: s.lower() if type(s) == str else s)
 val = val.applymap(lambda s: s.lower() if type(s) == str else s)
 
+print("Before any transformation.")
+print(train.columns)
+print(val.columns)
+
 # %%
 # Items, basic and non-basic divide
 nfri_items = column_names[37:]
 basic = nfri_items[0:11]
 non_basic = nfri_items[11:]
+
+print(column_names)
 
 # %%
 # Data transformations and feature creation
@@ -83,6 +91,10 @@ X_val = val[select_features]
 y_train = train[nfri_items]
 y_val = val[nfri_items]
 
+print("After select_features transformation.")
+print(X_train.columns)
+print(X_val.columns)
+
 # %%
 # Preferences to numbers
 y_train = dm.nfri_preferences_to_binary(y_train)
@@ -97,7 +109,7 @@ y_val_non_basic = y_val[non_basic]
 
 # %%
 # Define the transformations to be made
-transformer = mtr.col_transformer()
+# transformer = mtr.col_transformer()
 
 # %%
 # %%capture
@@ -119,29 +131,23 @@ nb = MultiOutputClassifier(GaussianNB(), n_jobs=-1)
 svm = MultiOutputClassifier(SVC(), n_jobs=-1)
 
 # %%
-# Define pipelines
+# Define pipelines # selector removed from pipelines below
 pipe_lr = Pipeline(
-    steps=[("pre_proc", transformer), ("selector", sfs_selector), ("logistic", logr)]
+    steps=[("pre_proc", mtr.col_transformer(None)), ("logistic", logr)]
 )  # Logistic
 
 pipe_knn = Pipeline(
-    steps=[("pre_proc", transformer), ("selector", sfs_selector), ("knn", knn)]
+    steps=[("pre_proc", mtr.col_transformer("first")), ("knn", knn)]
 )  # KNN
 
-pipe_rf = Pipeline(
-    steps=[("pre_proc", transformer), ("selector", sfs_selector), ("rf", rf)]
-)  # RF
+pipe_rf = Pipeline(steps=[("pre_proc", mtr.col_transformer("first")), ("rf", rf)])  # RF
 
-pipe_dt = Pipeline(
-    steps=[("pre_proc", transformer), ("selector", sfs_selector), ("dt", dt)]
-)  # DT
+pipe_dt = Pipeline(steps=[("pre_proc", mtr.col_transformer("first")), ("dt", dt)])  # DT
 
-pipe_nb = Pipeline(
-    steps=[("pre_proc", transformer), ("selector", sfs_selector), ("nb", nb)]
-)  # NB
+pipe_nb = Pipeline(steps=[("pre_proc", mtr.col_transformer("first")), ("nb", nb)])  # NB
 
 pipe_svm = Pipeline(
-    steps=[("pre_proc", transformer), ("selector", sfs_selector), ("svm", svm)]
+    steps=[("pre_proc", mtr.col_transformer("first")), ("svm", svm)]
 )  # SVM
 
 # %%
@@ -155,23 +161,28 @@ pipes = [pipe_lr, pipe_knn, pipe_rf, pipe_dt, pipe_nb, pipe_svm]
 results_basic, results_non_basic = mtr.test_all_models(
     pipes,
     "f1_micro",
-    "n_features_to_select",
-    [2, 5],
+    # "n_features_to_select",
+    # [2, 5],
     X_train,
     y_train_basic,
     y_train_non_basic,
 )
 
+print("The results from basic are:")
+print(results_basic)
+print("The results from non basic are:")
+print(results_non_basic)
+
 # %%
 # Save results to outputs/data/model_results
 with open(
-    f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic_reduced_features.pkl",
+    f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic_filtered_features.pkl",
     "wb",
 ) as f:
     pickle.dump(results_non_basic, f)
 
 with open(
-    f"{project_dir}/outputs/data/model_results/features_params_scores_basic_reduced_features.pkl",
+    f"{project_dir}/outputs/data/model_results/features_params_scores_basic_filtered_features.pkl",
     "wb",
 ) as f:
     pickle.dump(results_basic, f)

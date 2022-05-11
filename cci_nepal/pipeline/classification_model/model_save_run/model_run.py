@@ -54,6 +54,8 @@ project_dir = cci_nepal.PROJECT_DIR
 # Get parameters from config file
 b_features = config["final_model"]["basic_model_features"]
 nb_features = config["final_model"]["non_basic_model_features"]
+print(b_features)
+print(nb_features)
 
 # %%
 # Read data and feature names
@@ -79,14 +81,20 @@ dm.feature_creation(test)
 # %%
 # X split
 X_test = test[select_features]
+print("Test columns before transformation: ")
+print(X_test.columns)
 
 # %%
 # Define the transformations to be made
-transformer = mtr.col_transformer()
+transformer = mtr.col_transformer(None)
 
 # %%
 # Apply column transformer
 X_test_transform = transformer.fit_transform(X_test)
+
+
+print("To see what features are returned by get_features_names_out: ")
+print(list(transformer.get_feature_names_out()))
 
 # %%
 # Assign back to dataframes - to have feature names back
@@ -94,10 +102,15 @@ X_test_transform = pd.DataFrame(
     X_test_transform, columns=list(transformer.get_feature_names_out())
 )
 
+
 # %%
 # Reduce to just chosen features for basic and non-basic
 X_test_basic = X_test_transform[b_features].copy()
 X_test_non_basic = X_test_transform[nb_features].copy()
+print("X test selected basic features are: ")
+print(X_test_basic.columns)
+print("X test selected non basic features are: ")
+print(X_test_non_basic.columns)
 
 # %%
 # Add folder if not already created
@@ -130,12 +143,36 @@ basic_preds = mtr.create_predictions_files(
     y_pred_basic,
     basic,
     X_test,
-    X_test.columns[~X_test.columns.isin(["income_gen_ratio", "Ethnicity"])],
+    [
+        "House_Material",
+        "household_size",
+        "percent_female",
+        "children",
+        "income_gen_ratio",
+        "health_difficulty",
+        "sindupalchowk",
+    ],
 )
 
 non_basic_preds = mtr.create_predictions_files(
-    y_pred_non_basic, non_basic, X_test, ["sindupalchowk", "children"]
+    y_pred_non_basic,
+    non_basic,
+    X_test,
+    [
+        "House_Material",
+        "household_size",
+        "percent_female",
+        "children",
+        "income_gen_ratio",
+        "health_difficulty",
+        "sindupalchowk",
+    ],
 )
+
+print("The basic test predictions are: ")
+print(basic_preds)
+print("The non basic test predictions are: ")
+print(non_basic_preds)
 
 # %%
 # Save files

@@ -25,7 +25,7 @@ from sklearn.metrics import f1_score
 
 # Project libraries
 import cci_nepal
-from cci_nepal.getters.classification_model import get_real_data as grd
+from cci_nepal.getters.classification_model import get_data as grd
 from cci_nepal.pipeline.classification_model import data_manipulation as dm
 from cci_nepal.pipeline.classification_model import model_tuning_report as mtr
 from cci_nepal import config
@@ -85,7 +85,7 @@ y_test_non_basic = y_test[non_basic]
 
 # %%
 # Define the transformations to be made
-transformer = mtr.col_transformer()
+transformer = mtr.col_transformer(None)
 
 # %%
 # Apply column transformer

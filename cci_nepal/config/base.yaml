@@ -1,0 +1,20 @@
+final_model:
+  basic_model_features:
+    [
+      "rob_scaler__household_size",
+      "rob_scaler__percent_female",
+      "rob_scaler__income_gen_adults",
+      "one_hot__House_Material_clay",
+      "one_hot__House_Material_mud_bonded_bricks_stone",
+      "one_hot__House_Material_other",
+      "one_hot__House_Material_rcc_with_pillar",
+      "remainder__children",
+      "remainder__children_under_5",
+      "remainder__health_difficulty",
+      "remainder__previous_nfri",
+      "remainder__sindupalchowk",
+    ]
+  non_basic_model_features: ["remainder__children", "remainder__sindupalchowk"]
+  solver: "liblinear"
+  penalty_basic: "l2"
+  penalty_non_basic: "l2"

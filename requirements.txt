@@ -9,3 +9,10 @@ tqdm
 filelock
 typer
 sh
+seaborn
+imbalanced-learn
+sklearn
+geopandas
+geopy
+geocoder
+openpyxl

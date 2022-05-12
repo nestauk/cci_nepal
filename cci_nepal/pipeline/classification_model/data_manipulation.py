@@ -120,56 +120,45 @@ def transform_sets(df, column_names):
         "brickets with ciment",
     ]
     df.loc[
-        df.Material_Other.isin(cemment_with_bricks), "House_Material"
+        df.material_other.isin(cemment_with_bricks), "house_material"
     ] = "cement bonded bricks/stone"
 
-    df["House_Material"] = np.where(
-        df.Material_Other.str.contains("mato ghar|clay|mato|mud", case=False, na=False),
+    df["house_material"] = np.where(
+        df.material_other.str.contains("mato ghar|clay|mato|mud", case=False, na=False),
         "clay",
-        df["House_Material"],
+        df["house_material"],
     )
 
     df.drop(
-        ["Material_Other", "Previous_NFRI", "Ethnicity", "Ethnicity_Others"],
+        ["material_other", "previous_nfri", "ethnicity", "ethnicity_others"],
         axis=1,
         inplace=True,
     )
     df.fillna(0, inplace=True)
-    df["Respondent_Age"] = df["Respondent_Age"].astype(str).map(lambda x: x.strip())
+    df["respondent_age"] = df["respondent_age"].astype(str).map(lambda x: x.strip())
 
 
 # %%
 def feature_creation(df):
-    df.insert(2, "household_size", df.iloc[:, 5:25].sum(axis=1))
-    df.insert(3, "total_female", df.iloc[:, 14:24].sum(axis=1))
-    df.insert(4, "percent_female", (df.total_female / df.household_size) * 100)
-    df.drop(["total_female"], axis=1, inplace=True)
-    df.insert(4, "children", df.iloc[:, [7, 8, 9, 17, 18, 19]].sum(axis=1))
-    df["children"] = np.where(df.children > 0, 1, 0)
-    # df.insert(5, "children_under_5", df.iloc[:, [8, 18]].sum(axis=1))
-    # df["children_under_5"] = np.where(df.children_under_5 > 0, 1, 0)
-    # df.insert(
-    #    6,
-    # "adults",
-    # df.iloc[:, [12, 13, 14, 15, 16, 17, 18, 22, 23, 24, 25, 26, 27, 28]].sum(
-    #    axis=1
-    # ),
-    # )
+    df.insert(3, "household_size", df.iloc[:, 5:25].sum(axis=1))
+    df.insert(4, "total_male", df.iloc[:, 6:16].sum(axis=1))
     df.insert(
         5,
-        "income_gen_ratio",
-        ((df.Income_Generating_Members / df.household_size) * 100),
+        "percent_non_male",
+        ((df.household_size - df.total_male) / df.household_size) * 100,
     )
-    # df.insert(
-    # 8, "income_gen_adults", ((df.Income_Generating_Members / df.adults) * 100)
-    # )
-    df.insert(6, "health_difficulty", df.iloc[:, [33, 34, 35, 36, 37, 38]].sum(axis=1))
-    df.health_difficulty = np.where(df.health_difficulty > 0, 1, 0)
-    df["respondent_female"] = np.where(df.Respondent_Gender == "female", 1, 0)
-    # df["previous_nfri"] = np.where(df.Previous_NFRI == "yes", 1, 0)
-    df["sindupalchowk"] = np.where(df.District == "sindupalchok", 1, 0)
+    df.drop(["total_male"], axis=1, inplace=True)
+    df.insert(5, "children_upto_5", df.iloc[:, [7, 17]].sum(axis=1))
+    df["children_upto_5"] = np.where(df.children_upto_5 > 0, 1, 0)
+    df.insert(
+        6,
+        "income_gen_ratio",
+        ((df.income_generating_members / df.household_size) * 100),
+    )
+    df.insert(7, "health_difficulty", df.iloc[:, [29, 30, 31, 32, 33, 34]].sum(axis=1))
+    df["respondent_female"] = np.where(df.respondent_gender == "female", 1, 0)
+    df["sindupalchowk"] = np.where(df.district == "sindupalchok", 1, 0)
     df.income_gen_ratio = df.income_gen_ratio.replace(np.inf, np.nan)
-    # df.income_gen_adults = df.income_gen_adults.replace(np.inf, np.nan)
     df.fillna(0, inplace=True)
 
 

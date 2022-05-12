@@ -41,16 +41,10 @@ df.shape
 
 df_hill = df[df["District"] == "Sindupalchok"]
 df_terai = df[df["District"] == "Mahottari"]
-print(df_hill.shape)
-print(df_terai.shape)
+
 
 train_hill, test_hill = train_test_split(df_hill, test_size=150, random_state=42)
 train_terai, test_terai = train_test_split(df_terai, test_size=150, random_state=42)
-
-print(train_hill.shape)
-print(test_hill.shape)
-print(train_terai.shape)
-print(test_terai.shape)
 
 # Add folder if not already created
 Path(f"{project_dir}/outputs/data/data_for_modelling/").mkdir(

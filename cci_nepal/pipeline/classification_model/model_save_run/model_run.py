@@ -18,7 +18,7 @@
 # # Model run
 # <br>
 # <br>
-# The purpose of this script is to run the x2 classification models (basic and non-basic NFRI items) on new data (defaulted to the test set) and save the results to excel files. The resulting files are:
+# The purpose of this script is to run the x2 classification models (Shelter and Wash-Dignity NFRI items) on new data (defaulted to the test set) and save the results to excel files. The resulting files are:
 #
 # - `basic_test_predictions.xlsx`
 # - `non_basic_test_predictions.xlsx`
@@ -133,10 +133,10 @@ basic_preds = mtr.create_predictions_files(
     basic,
     X_test,
     [
-        "House_Material",
+        "house_material",
         "household_size",
-        "percent_female",
-        "children",
+        "percent_non_male",
+        "children_upto_5",
         "income_gen_ratio",
         "health_difficulty",
         "sindupalchowk",
@@ -148,10 +148,10 @@ non_basic_preds = mtr.create_predictions_files(
     non_basic,
     X_test,
     [
-        "House_Material",
+        "house_material",
         "household_size",
         "percent_female",
-        "children",
+        "children_upto_5",
         "income_gen_ratio",
         "health_difficulty",
         "sindupalchowk",

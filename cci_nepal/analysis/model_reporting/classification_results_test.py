@@ -191,11 +191,11 @@ for cm, item in zip(cm_non_basic, non_basic):
     print(" ")
 
 # %%
-print("Basic items")
+print("Shelter items")
 mtr.save_cm_plots(cm_basic, "basic", basic)
 
 # %%
-print("Non basic items")
+print("Wash and Dignity items")
 mtr.save_cm_plots(cm_non_basic, "non_basic", non_basic)
 
 # %%

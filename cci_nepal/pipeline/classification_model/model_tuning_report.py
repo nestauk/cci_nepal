@@ -338,7 +338,6 @@ def col_transformer(dummy_col):
             (
                 "one_hot",
                 OneHotEncoder(drop=dummy_col, handle_unknown="ignore"),
-                # ["Ethnicity", "House_Material"],# Ethnicity removed
                 ["House_Material"],
             ),
         ],

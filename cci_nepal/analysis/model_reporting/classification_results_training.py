@@ -47,9 +47,6 @@ non_basic_results_train = pd.read_pickle(
 # ### Basic
 
 # %%
-print("The following are the basic_result_train scores:")
-print(basic_results_train)
-
 # %%
 # n_features_use = [17, 17, 2, 2, 2, 17]
 
@@ -100,9 +97,6 @@ plt.show()
 # ### Non-basic
 
 # %%
-print("The following are the non_basic_result_train scores:")
-print(non_basic_results_train)
-
 # %%
 # n_features_use = [5, 5, 5, 2, 2, 5]
 

@@ -65,12 +65,6 @@ lr_solver = config["final_model"]["solver"]
 b_penalty = config["final_model"]["penalty_basic"]
 nb_penalty = config["final_model"]["penalty_non_basic"]
 
-print(b_features)
-print(nb_features)
-print(lr_solver)
-print(b_penalty)
-print(nb_penalty)
-
 
 # %%
 # Combine training and validation sets
@@ -140,16 +134,12 @@ Path(f"{project_dir}/outputs/models/").mkdir(parents=True, exist_ok=True)
 # %%
 # Fit model
 basic_model = logr_b.fit(X_train_basic, y_train_basic)
-print("The basic model is: ")
-print(basic_model)
 # Save model to disk
 filename = f"{project_dir}/outputs/models/final_classification_model_basic.sav"
 pickle.dump(basic_model, open(filename, "wb"))
 
 # Fit model
 non_basic_model = logr_nb.fit(X_train_non_basic, y_train_non_basic)
-print("The non basic model is: ")
-print(non_basic_model)
 # Save model to disk
 filename = f"{project_dir}/outputs/models/final_classification_model_non_basic.sav"
 pickle.dump(non_basic_model, open(filename, "wb"))

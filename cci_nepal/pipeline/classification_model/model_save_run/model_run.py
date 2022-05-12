@@ -38,6 +38,7 @@ from sklearn.multioutput import MultiOutputClassifier
 from sklearn.linear_model import LogisticRegression
 import pickle
 from pathlib import Path
+import joblib
 
 # Project libraries
 import cci_nepal
@@ -81,12 +82,12 @@ dm.feature_creation(test)
 X_test = test[select_features]
 
 # %%
-# Define the transformations to be made
-transformer = mtr.col_transformer(None)
+# Load transformer applied fitted to the training set
+transformer = joblib.load(f"{project_dir}/outputs/models/transformer.pkl")
 
 # %%
 # Apply column transformer
-X_test_transform = transformer.fit_transform(X_test)
+X_test_transform = transformer.transform(X_test)
 
 # %%
 # Assign back to dataframes - to have feature names back

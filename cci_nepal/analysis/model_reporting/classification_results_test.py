@@ -29,6 +29,7 @@ from cci_nepal.getters.classification_model import get_data as grd
 from cci_nepal.pipeline.classification_model import data_manipulation as dm
 from cci_nepal.pipeline.classification_model import model_tuning_report as mtr
 from cci_nepal import config
+import joblib
 
 # %%
 # Set the project directory
@@ -84,12 +85,12 @@ y_test_basic = y_test[basic]
 y_test_non_basic = y_test[non_basic]
 
 # %%
-# Define the transformations to be made
-transformer = mtr.col_transformer(None)
+# Load transformer applied fitted to the training set
+transformer = joblib.load(f"{project_dir}/outputs/models/transformer.pkl")
 
 # %%
 # Apply column transformer
-X_test_transform = transformer.fit_transform(X_test)
+X_test_transform = transformer.transform(X_test)
 
 # %%
 # Assign back to dataframes - to have feature names back

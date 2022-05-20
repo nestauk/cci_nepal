@@ -41,6 +41,7 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import accuracy_score
 import pickle
 from pathlib import Path
+import joblib
 
 # Project libraries
 import cci_nepal
@@ -108,12 +109,12 @@ y_test_basic = y_test[basic]
 y_test_non_basic = y_test[non_basic]
 
 # %%
-# Define the transformations to be made
-transformer = mtr.col_transformer(None)
+# Load transformer applied fitted to the training set
+transformer = joblib.load(f"{project_dir}/outputs/models/transformer.pkl")
 
 # %%
 # Apply column transformer
-X_test_transform = transformer.fit_transform(X_test)
+X_test_transform = transformer.transform(X_test)
 
 # %%
 # Assign back to dataframes - to have feature names back

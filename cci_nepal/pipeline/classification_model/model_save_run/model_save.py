@@ -35,6 +35,7 @@ from sklearn.multioutput import MultiOutputClassifier
 from sklearn.linear_model import LogisticRegression
 import pickle
 from pathlib import Path
+import joblib
 
 # Project libraries
 import cci_nepal
@@ -117,6 +118,10 @@ logr_nb = MultiOutputClassifier(
 # Apply column transformer
 X_train = transformer.fit_transform(X_train)
 
+
+# %%
+# Save fitted transformer to disk
+joblib.dump(transformer, f"{project_dir}/outputs/models/transformer.pkl")
 
 # %%
 # Assign back to dataframes - to have feature names back

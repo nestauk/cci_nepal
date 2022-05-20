@@ -39,8 +39,8 @@ plt.rc("figure", max_open_warning=0)
 
 # %%
 # Get parameters from config file
-b_features = config["final_model"]["basic_model_features"]
-nb_features = config["final_model"]["non_basic_model_features"]
+b_features = config["final_model"]["model_features"]
+
 
 # %%
 # Read data and feature names
@@ -103,7 +103,7 @@ X_test_transform = pd.DataFrame(
 # %%
 # Reduce to just chosen features for basic and non-basic
 X_test_basic = X_test_transform[b_features].copy()
-X_test_non_basic = X_test_transform[nb_features].copy()
+X_test_non_basic = X_test_transform[b_features].copy()
 
 # %%
 # Loading models (best performing)

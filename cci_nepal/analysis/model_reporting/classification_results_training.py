@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 
 # Project libraries
 import cci_nepal
+from pathlib import Path
 
 # %%
 # Set the project directory
@@ -61,7 +62,14 @@ for model in basic_results_train:
     score = basic_results_train[model][0]
     f1_scores.append(score)
 
-# %%
+# Add folder if not already created
+Path(f"{project_dir}/outputs/data/train_results/").mkdir(parents=True, exist_ok=True)
+
+model_scores_shelter = pd.DataFrame({"Models": models, "F1_Scores": f1_scores})
+
+model_scores_shelter.to_csv(
+    f"{project_dir}/outputs/data/train_results/model_scores_shelter.csv", index=False
+)
 # %matplotlib inline
 plt.style.use("ggplot")
 
@@ -108,6 +116,12 @@ for model in non_basic_results_train:
     models.append(model)
     score = non_basic_results_train[model][0]
     f1_scores.append(score)
+
+model_scores_wash = pd.DataFrame({"Models": models, "F1_Scores": f1_scores})
+
+model_scores_wash.to_csv(
+    f"{project_dir}/outputs/data/train_results/model_scores_wash.csv", index=False
+)
 
 # %%
 # %matplotlib inline

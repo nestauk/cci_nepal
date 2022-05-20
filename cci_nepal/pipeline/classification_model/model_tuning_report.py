@@ -77,7 +77,7 @@ def get_pipeline_results(search, y_type, X_train):
             rob_scal_feats,
             one_hot_feats,
             [
-                "children_upto_5",
+                "children_under_5",
                 "health_difficulty",
                 "sindupalchowk",
             ],

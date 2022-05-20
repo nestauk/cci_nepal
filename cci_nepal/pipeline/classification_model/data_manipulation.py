@@ -148,8 +148,8 @@ def feature_creation(df):
         ((df.household_size - df.total_male) / df.household_size) * 100,
     )
     df.drop(["total_male"], axis=1, inplace=True)
-    df.insert(5, "children_upto_5", df.iloc[:, [7, 17]].sum(axis=1))
-    df["children_upto_5"] = np.where(df.children_upto_5 > 0, 1, 0)
+    df.insert(5, "children_under_5", df.iloc[:, [7, 17]].sum(axis=1))
+    df["children_under_5"] = np.where(df.children_under_5 > 0, 1, 0)
     df.insert(
         6,
         "income_gen_ratio",

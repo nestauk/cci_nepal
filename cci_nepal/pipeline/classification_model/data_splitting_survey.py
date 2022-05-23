@@ -31,6 +31,15 @@ project_dir = cci_nepal.PROJECT_DIR
 
 # Read in df
 df = grd.read_excel_file(f"{project_dir}/inputs/data/survey_data.xlsx")
+# df = pd.read_csv(f"{project_dir}/inputs/data/survey_data_dummy.csv")
+print("Shape pre outlier removal: ")
+print(df.shape)
+
+df = df[df.iloc[:, 6:16].sum(axis=1) < 11]
+df = df[df.iloc[:, 17:27].sum(axis=1) < 11]
+
+print("Shape post outlier removal: ")
+print(df.shape)
 
 # Sort to ensure the order is consistent each time before splitting
 df.sort_values(by="_index", inplace=True)

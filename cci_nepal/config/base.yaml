@@ -1,5 +1,5 @@
 final_model:
-  basic_model_features:
+  model_features:
     [
       "rob_scaler__household_size",
       "rob_scaler__percent_non_male",
@@ -10,25 +10,11 @@ final_model:
       "one_hot__house_material_other",
       "one_hot__house_material_rcc_with_pillar",
       "one_hot__house_material_wooden_pillar",
-      "remainder__children_upto_5",
+      "remainder__children_under_5",
       "remainder__health_difficulty",
       "remainder__sindupalchowk",
     ]
-  non_basic_model_features:
-    [
-      "rob_scaler__household_size",
-      "rob_scaler__percent_non_male",
-      "rob_scaler__income_gen_ratio",
-      "one_hot__house_material_cement_bonded_bricks_stone",
-      "one_hot__house_material_clay",
-      "one_hot__house_material_mud_bonded_bricks_stone",
-      "one_hot__house_material_other",
-      "one_hot__house_material_rcc_with_pillar",
-      "one_hot__house_material_wooden_pillar",
-      "remainder__children_upto_5",
-      "remainder__health_difficulty",
-      "remainder__sindupalchowk",
-    ]
+
   solver: "liblinear"
   penalty_basic: "l2"
   penalty_non_basic: "l1"

@@ -60,12 +60,10 @@ train.shape
 
 # %%
 # Get parameters from config file
-b_features = config["final_model"]["basic_model_features"]
-nb_features = config["final_model"]["non_basic_model_features"]
+b_features = config["final_model"]["model_features"]
 lr_solver = config["final_model"]["solver"]
 b_penalty = config["final_model"]["penalty_basic"]
 nb_penalty = config["final_model"]["penalty_non_basic"]
-
 
 # %%
 # Combine training and validation sets
@@ -95,6 +93,7 @@ dm.feature_creation(train)
 X_train = train[select_features]
 y_train = train[nfri_items]
 
+
 # %%
 # Preferences to binary
 y_train = dm.nfri_preferences_to_binary(y_train)
@@ -119,6 +118,7 @@ logr_nb = MultiOutputClassifier(
 # Apply column transformer
 X_train = transformer.fit_transform(X_train)
 
+
 # %%
 # Save fitted transformer to disk
 joblib.dump(transformer, f"{project_dir}/outputs/models/transformer.pkl")
@@ -127,10 +127,11 @@ joblib.dump(transformer, f"{project_dir}/outputs/models/transformer.pkl")
 # Assign back to dataframes - to have feature names back
 X_train = pd.DataFrame(X_train, columns=list(transformer.get_feature_names_out()))
 
+
 # %%
 # Reduce to just chosen features for basic and non-basic
 X_train_basic = X_train[b_features].copy()
-X_train_non_basic = X_train[nb_features].copy()
+X_train_non_basic = X_train[b_features].copy()
 
 # %%
 # Add folder if not already created

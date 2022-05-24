@@ -1,121 +1,184 @@
 # Collective Crisis Intelligence Project for The Nepal Red Cross
 
-## Contents
+**_Public repository for hosting the technical outputs of the CCI Nepal project._**
 
-- [Background](#background)
-- [Overview of the prototype](#overview-of-the-prototype)
-- [Model workflow](#model-workflow)
-  - [Data preprocessing](#data-preprocessing)
-  - [Classification model development](#classification-model-development)
-  - [Free text analysis](#free-text-analysis)
-- [Running the models](#running-the-models)
-  - [Steps to take before running the model](#steps-to-take-before-running-the-model)
-  - [Input needed](#input-needed)
-  - [Run the scripts](#run-the-scripts)
-  - [Outputs](#outputs)
+## Welcome!
 
-## Background
+This repository contains the code and documentation for a collective crisis intellegence project with the Nepal Red Cross that looks at finding the optimum Non-food-related-items (NFRI) for different households.
 
-After a crisis strikes, people can be left without important supplies that support them to stay safe, healthy and comfortable. As part of coordinated efforts with other governmental and non-governmental organisations, the Nepal Red Cross Society (NRCS) provides Non-Food Related Items (NFRI) packages to affected communities. A typical family NFRI package includes:
+### Background
+
+After a crisis strikes, people can be left without important supplies that support them to stay safe, healthy and comfortable. As part of coordinated efforts with other governmental and non-governmental organisations, the Nepal Red Cross Society (NRCS) provides Non-Food Related Items (NFRI) packages to affected communities.
+
+A typical family NFRI package includes:
 
 - Tarpaulin
 - Blanket
 - Sari, Male Dhoti
-- Shouting cloth, printed cloth, plain cloth, tericotten cloth
+- Shouting cloth, printed cloth, plain cloth, teri cotten cloth
 - Utensil set
 - Water bucket
 - Rope
 
-These packages are often distributed after a crisis and an Initial Rapid Assessment has been carried out. Following interviews with the NRCS team members it was highlighted that there is a need to:
+These packages are often distributed in the aftermath of a crisis based on an Initial Rapid Assessment. During the project scoping phase, we interviewed NRCS team members to assess their needs and found that the team was interested in:
 
-- Understand a better way of knowing what to distribute and when
-- Understand what new NFRI items community members are interested in
+- Identifying a better way of knowing what NFRI items to distribute and when
+- Exploring what new NFRI items community members are interested in
 
-This project uses new data collected from surveying x2 district () to understand firstly the how essential different household types see the existing items and secondly what new items would different household suggest in a flood crisis. The result of this analysis gives two outputs:
+In line with these needs, the project uses new data collected from surveying two districts in Nepal - Sindhupalchok and Mahottari.
 
-1. A predictive model that can predict item essentialness based on household information
-2. A one-off piece of analysis showing what new items are suggested across different demographic features
+<b>Project aims:</b>
 
-## Overview of the prototype
+1. Measure the extent to which different households perceive existing items as essential (also referred to as item “essentialness” henceforth), and
+2. Collect and summarise suggestions on new NFRI items to include in packages in case of a flood crisis.
 
-The NFRI predict prototype takes in demographic information on a household such as the district they are from, the number of members of the household and if they have children and outputs the list of NFRI items with their predicted likelihood of being essential to that household (0 to 1 score) in a flood crisis. Figure 1 depicts the steps of the tool from input to predictions.
+The analysis provided in this repository generates two outputs:
 
-<img src="outputs/figures/readme/how_the_model_works.png" width="500">
+1. A model that predicts item essentialness based on provided household information
+2. A stand alone piece of analysis showing what new items are suggested by households across different demographic features
 
-Figure 1: Overview of the prototype
+Find out more about the project in our report 'title of the report' [insert link].
 
-## Model workflow
+## Contents
 
-Figure 2 summarises the steps in the model workflow.
+`Published on July xx, 2022`
 
-![Figure 2](outputs/figures/readme/model_workflow.png)
+- [**Model workflow**](https://github.com/nestauk/cci_nepal/tree/15_model_pipeline/cci_nepal/pipeline/classification_model/model_save_run): Python code for train the models and then running on the test set.
+- [**Free text analysis**](https://github.com/nestauk/cci_nepal/tree/15_model_pipeline/cci_nepal/analysis): Analysis of the survey questions asking participants for suggestions of new NFRI items.
 
-Figure 2: Model workflow
+## Data
 
-### Data Preprocessing
+This project uses new survey data collected from two districts in Nepal - Sindhupalchok and Mahottari. These districts were selected as they capture information from both the Hill and Plain regions in Nepal. Both districts are among the most flood affected districts of Nepal and have received NFRI from the NRC in the past. To design the survey we worked with members of the Red Cross and IFRC teams to develop the questions and ensure they were accessible.
 
-Our dataset comes from a survey conducted with the goal of identifying how essential a certain NFRI (Non Food Related Item) is for a particular household given the household features (like demographics and geographic location.) The original survey dataset contained 2338 observations and 73 features. The features can be divided into input and output features, with input features related to various demograhics and geography and output features related to preference labels (Essential, Desirable and Non Essential) given by the respondents for each NFRI. The dataset is then further divided into train, validation and test set.
+3,265 responses were collected from a 50/50 split across male and female respondents. Random sampling was then used for the respondents collected within each gender.
 
-For the data to be in the right format for modelling some data cleaning and pre-processing steps had to take place. Amoung these include:
+<b>The survey was split into three sections</b>
 
-- String replacements and character removal to make sure all values are consistent (in some cases headers and values changed as the data was processed and collected slightly differently from different Red Cross staff members and volunteers
-- Recoding values in 'other' columns
-- One-hot-encoding and scaling of numeric features
-- Combining features such as age/gender breakdown to create new condensed features such as household size and percent female members
+1. <b>Demographic information about the household</b>: The first section asks the respondent a series of questions to understand the demographic characteristics of their household. In addition this section also asks for the households lat/long location and if they have previously received NFRI items.
+2. <b>NFRI preferences of the household in a flood crisis</b>: The second section asks the respondent to imagine a new flood crisis and asks them to state how important they see each NFRI item already distributed by the Red Cross.
+3. <b>New NFRI items</b>: The final section asks the respondent to suggest new NFRI items their household might need in a flood crisis that are not listed in section 2.
 
-Sklearns pipeline was used to ensure any pre-processing steps that might leak test data into training was done inside CV folds whilst performing feature and model selection.
+The first two sections are used for modelling where the first is our X features and the second our Y output variables. This last section is not used for modelling but for a one-off piece of analysis for the Red Cross to help them understand what new items are requested by different groups.
 
-#### Recoding of NFRI preferences
+### Data dictionary of final features
 
-In the survey community members were asked to provide a rating of their NFRI preferences in three categories: essential, desirable and unnecessary. The results found that very few rated an NFRI item as unnecessary. Also, after speaking with the Red Cross team through workshops we found many people felt that the term 'unnecessary' should not be used in the model.
+The below table depicts the final features used by the model with their data type and a brief description.
 
-With the above in mind and with the aim of the model producing results that would be meaningful to the user, we decide to recode the values to binary (0-1 non-essential-essential) and use the probability scores from the classfication model to predict the likelihood of an item being deemed essential by a household.
+| Column name        | Description | Type  |
+| :----------------- | :---------- | :---- |
+| household_size     | Description | int   |
+| percent_non_male   | Description | float |
+| children_under_5   | Description | int   |
+| income_gen_ratio   | Description | float |
+| health_difficulty  | Description | int   |
+| sindupalchowk      | Description | int   |
+| household_material | Description | str   |
 
-### Classification model development
+## Installation
 
-In choosing the optimum model type and features for each basic and non-basic item groups, we Sklearns pipeline feature and Gridsearch to test different feature numbers, model types and hyper-paramters. The script to run these tests is stored in `cci_nepal/analysis/model_development/` and is called `model_development.py`.
+Unfortunately the dataset is not publicly available due to it being a survey collected directly by the Red Cross (more information here).
 
-After the feature selection and model tuning stage, the best performing model is run on the test set and a series of metrics are produced across items to evaluate its performace. These include - confusion matrix plots (saved in `outputs/figures/cm`, accuracy, micro F1, sensitivity and specificity. These scripts to produce these results are in `cci_nepal/analysis/model_reporting`.
+However, we have created a script that generates dummy data that allows you to test the running of `model workflow`. Follow the steps below to generate the dummy data and run the code.
 
-### Free text analysis
+### Clone and set up the repo
 
-In addition to the predictive model, a one-off script was built that explores the answers given in the survey around what new items different households suggest for future NFRI packs. This analysis is stored in `cci_nepal/analysis/free_text_analysis`.
+1. To run the models you will first need to setup the project. Follow the below two steps to do this:
 
-## Running the model
+```shell
+$ git clone https://github.com/nestauk/cci_nepal
+$ cd cci_nepal
+```
 
-The python scripts inside `cci_nepal/pipeline/classification_model/model_run` can be used to train and run the NFRI predict models on new data. The first script `model_save.py` fits the x2 models (basic and non-basic NFRI's) on the whole training set using the best model and parameters found in the model development stage and saves the fitted models to disk. The second script `model_run.py` loads the models and uses them to predict on a new data (the held out test set by default).
-
-Before feeding data into the models, a few different pre-processing and cleaning steps are taken on the data to make sure it is in the right format. These steps are all held in functions saved in `data_manipulation.py` and `model_tuning_report.py` scripts found in `pipeline/classfication_model/`.
-
-### Steps to take before runnning
-
-To run the models you will first need to setup the project. Follow the below two steps to do this:
-
-1. Clone the project and cd into the `cci_nepal` directory
 2. Run the command `make install` to create the virtual environment and install dependencies
+
 3. Inside the project directory run `make inputs-pull` to access the data from S3 (for those with access to the Nesta S3 account)
 
 To note the project is setup using the Nesta Cookiecutter (guidelines on the Nesta Cookiecutter can be [found here](https://nestauk.github.io/ds-cookiecutter/structure/)).
 
-### Input needed
+### Create a dummy dataset
 
-After you setup the project you will need your training and test datasets. To build our models we used new data collected by the Nepal Red Cross in two districts - Sindhupalchok and Mahottari. The raw data from these surveys are saved in `cci_nepal/inputs/data/real_data/Full_Data_District.csv`. Running the script `data_splitting_survey.py` in `pipeline/classfication_model/` produces the training and test dataset.
+Run the below python file to create and save a dummy dataset that can be used for modelling. This is based on the questions used in our survey.
 
-To run the scripts the data needs to be in the same format as the survey data collected and saved in `cci_nepal/outputs/data/data_for_modelling/`.
+```shell
+$ cd cci_nepal/pipeline
+$ python3 dummy_data.py
+```
 
-### Run the scripts
+#### Outputs
 
-Perform the following steps to run the scripts:
+Running the `dummy_data.py` file saves a dummy version of the data you can use for modelling.
 
-- `cd` to `cci_nepal/pipeline/classification_model/model_run`
-- run `python3 model_save.py`
-- run `python3 model_run.py`
+`survey_data.py` saved in `inputs/data`.
 
-### Outputs
+### Save and run the models
+
+Perform the following steps to train and run the models:
+
+Split the survey data into training / validation and test sets
+
+```shell
+$ cd cci_nepal/pipeline
+$ python3 data_splitting.py
+```
+
+#### Outputs
+
+There are six files created from running the `data_splitting.py` file. These are saved in `outputs/data/data_for_modelling` and are listed below. These form the training, validation and test sets used for modelling.
+
+Training sets
+
+- `train.csv`
+- `train_hill.csv`
+- `train_terai.csv`
+
+Test sets
+
+- `val.csv`
+- `test_hill.csv`
+- `test_terai.csv`
+
+Move into the `model_run` folder and run the following file to train, save and run the models.
+
+```shell
+$ cd cci_nepal/pipeline/model_run
+$ python3 model_save.py
+$ python3 model_run.py
+```
+
+### Final Outputs
 
 There are two files created from running the models and saved to outputs:
 
-- `basic_test_predictions.xlsx`
-- `non_basic_test_predictions.xlsx`
+- `shelter_test_predictions.xlsx`
+- `dignity_test_predictions.xlsx`
 
 These contain the survey inputs and predictions for each basic and non-basic NFRI items respectively. The format of each file will be slighlty different as different numbers of features are used and the NFRI outputs are different. The first set of columns will contain the feature names and the next set will contain the NFRI items with a 0 to 1 probability as to whether they are the item is essential.
+
+## Directory structure
+
+The repository has the following main directories:
+
+```
+  ├── cci_nepal                       <- Packaged code (various modules, utilities and readme)
+  │   ├── analysis
+  │   │   ├── model_development       <- Model tuning on the training set to find optimum models and parameters
+  │   │   ├── model_reporting         <- Scripts to collect / report the results on the test set
+  │   │   ├── data_analysis           <- Exploratory data analysis of the survey data
+  │   │   ├── free_text_analysis      <- Analysis of the text questions of suggestions for new items
+  │   │   ...
+  │   ├── config                      <- Holds variables, feature names and parameters used in the codebase
+  │   ├── getters                     <- Functions for getting the data
+  │   ├── pipeline                    <- Holds scripts for all pipeline components
+  │   │   └── model_workflow          <- Fits and saves the model using training data and runs it on test data
+  │   ├── utils                       <- Utility functions needed across different parts of the codebase
+  │   ...
+  ├── inputs
+  │   └── data                        <- Holds original survey data (or dummy data)
+  │   ...
+  └── outputs
+      ├── data
+      │   └── data_for_modelling      <- Training, validation and test sets saved here
+      ├── models                      <- Saved models after running model_workflow
+      ...
+
+```

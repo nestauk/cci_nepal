@@ -137,7 +137,7 @@ Test sets
 - `test_hill.csv`
 - `test_terai.csv`
 
-Move into the `model_run` folder and run the following file to train, save and run the models.
+Move into the `model_workflow` folder and run the following file to train, save and run the models.
 
 ```shell
 $ cd cci_nepal/pipeline/model_run

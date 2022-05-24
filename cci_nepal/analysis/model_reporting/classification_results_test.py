@@ -25,9 +25,9 @@ from sklearn.metrics import f1_score
 
 # Project libraries
 import cci_nepal
-from cci_nepal.getters.classification_model import get_data as grd
-from cci_nepal.pipeline.classification_model import data_manipulation as dm
-from cci_nepal.pipeline.classification_model import model_tuning_report as mtr
+from cci_nepal.getters import get_data as grd
+from cci_nepal.pipeline import data_manipulation as dm
+from cci_nepal.pipeline import model_tuning_report as mtr
 from cci_nepal import config
 import joblib
 
@@ -45,17 +45,10 @@ b_features = config["final_model"]["model_features"]
 
 # %%
 # Read data and feature names
-test_hill = grd.read_test_hill_data()
-test_terai = grd.read_test_terai_data()
+test = grd.read_test_data()
 column_names = grd.get_lists(f"{project_dir}/cci_nepal/config/column_names.csv")
 select_features = grd.get_lists(f"{project_dir}/cci_nepal/config/select_features.csv")
 
-# %%
-# Combine test sets and shuffle
-test = pd.concat([test_hill, test_terai], ignore_index=True)
-test = shuffle(test, random_state=1)
-
-# %%
 # Lowercase values
 test = test.applymap(lambda s: s.lower() if type(s) == str else s)
 
@@ -109,11 +102,11 @@ X_test_non_basic = X_test_transform[b_features].copy()
 # %%
 # Loading models (best performing)
 basic_model = pickle.load(
-    open(f"{project_dir}/outputs/models/final_classification_model_basic.sav", "rb")
+    open(f"{project_dir}/outputs/models/final_classification_model_shelter.sav", "rb")
 )
 
 non_basic_model = pickle.load(
-    open(f"{project_dir}/outputs/models/final_classification_model_non_basic.sav", "rb")
+    open(f"{project_dir}/outputs/models/final_classification_model_wash.sav", "rb")
 )
 
 # %%

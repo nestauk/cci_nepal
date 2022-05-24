@@ -39,9 +39,9 @@ import joblib
 
 # Project libraries
 import cci_nepal
-from cci_nepal.pipeline.classification_model import model_tuning_report as mtr
-from cci_nepal.getters.classification_model import get_data as grd
-from cci_nepal.pipeline.classification_model import data_manipulation as dm
+from cci_nepal.pipeline import model_tuning_report as mtr
+from cci_nepal.getters import get_data as grd
+from cci_nepal.pipeline import data_manipulation as dm
 from cci_nepal import config
 
 # %%
@@ -62,8 +62,8 @@ train.shape
 # Get parameters from config file
 b_features = config["final_model"]["model_features"]
 lr_solver = config["final_model"]["solver"]
-b_penalty = config["final_model"]["penalty_basic"]
-nb_penalty = config["final_model"]["penalty_non_basic"]
+b_penalty = config["final_model"]["penalty_shelter"]
+nb_penalty = config["final_model"]["penalty_wash"]
 
 # %%
 # Combine training and validation sets
@@ -141,11 +141,11 @@ Path(f"{project_dir}/outputs/models/").mkdir(parents=True, exist_ok=True)
 # Fit model
 basic_model = logr_b.fit(X_train_basic, y_train_basic)
 # Save model to disk
-filename = f"{project_dir}/outputs/models/final_classification_model_basic.sav"
+filename = f"{project_dir}/outputs/models/final_classification_model_shelter.sav"
 pickle.dump(basic_model, open(filename, "wb"))
 
 # Fit model
 non_basic_model = logr_nb.fit(X_train_non_basic, y_train_non_basic)
 # Save model to disk
-filename = f"{project_dir}/outputs/models/final_classification_model_non_basic.sav"
+filename = f"{project_dir}/outputs/models/final_classification_model_wash.sav"
 pickle.dump(non_basic_model, open(filename, "wb"))

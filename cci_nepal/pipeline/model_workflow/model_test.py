@@ -45,9 +45,9 @@ import joblib
 
 # Project libraries
 import cci_nepal
-from cci_nepal.getters.classification_model import get_data as grd
-from cci_nepal.pipeline.classification_model import data_manipulation as dm
-from cci_nepal.pipeline.classification_model import model_tuning_report as mtr
+from cci_nepal.getters import get_data as grd
+from cci_nepal.pipeline import data_manipulation as dm
+from cci_nepal.pipeline import model_tuning_report as mtr
 from cci_nepal import config
 
 # %%
@@ -59,8 +59,7 @@ project_dir = cci_nepal.PROJECT_DIR
 b_features = config["final_model"]["model_features"]
 
 # Read data and feature names
-test_hill = grd.read_test_hill_data()
-test_terai = grd.read_test_terai_data()
+test = grd.read_test_data()
 
 # For dummy data prediction
 # test = pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/test_dummy_data.csv")
@@ -68,10 +67,6 @@ test_terai = grd.read_test_terai_data()
 column_names = grd.get_lists(f"{project_dir}/cci_nepal/config/column_names.csv")
 select_features = grd.get_lists(f"{project_dir}/cci_nepal/config/select_features.csv")
 
-# %%
-# Combine test sets and shuffle
-test = pd.concat([test_hill, test_terai], ignore_index=True)
-test = shuffle(test, random_state=1)
 
 # %%
 # For bias audit
@@ -139,11 +134,11 @@ Path(f"{project_dir}/outputs/models/").mkdir(parents=True, exist_ok=True)
 # %%
 # Loading models (best performing)
 basic_model = pickle.load(
-    open(f"{project_dir}/outputs/models/final_classification_model_basic.sav", "rb")
+    open(f"{project_dir}/outputs/models/final_classification_model_shelter.sav", "rb")
 )
 
 non_basic_model = pickle.load(
-    open(f"{project_dir}/outputs/models/final_classification_model_non_basic.sav", "rb")
+    open(f"{project_dir}/outputs/models/final_classification_model_wash.sav", "rb")
 )
 
 # Predict on test set
@@ -222,21 +217,21 @@ Path(f"{project_dir}/outputs/data/test_evaluation_results/").mkdir(
 
 
 basic_preds.to_excel(
-    f"{project_dir}/outputs/data/test_evaluation_results/basic_test_predictions.xlsx",
+    f"{project_dir}/outputs/data/test_evaluation_results/shelter_test_predictions.xlsx",
     index=False,
 )
 non_basic_preds.to_excel(
-    f"{project_dir}/outputs/data/test_evaluation_results/non_basic_test_predictions.xlsx",
+    f"{project_dir}/outputs/data/test_evaluation_results/wash_test_predictions.xlsx",
     index=False,
 )
 
 
 evaluation_metric_basic.to_excel(
-    f"{project_dir}/outputs/data/test_evaluation_results/basic_test_evaluation.xlsx",
+    f"{project_dir}/outputs/data/test_evaluation_results/shelter_test_evaluation.xlsx",
     index=True,
 )
 evaluation_metric_non_basic.to_excel(
-    f"{project_dir}/outputs/data/test_evaluation_results/non_basic_test_evaluation.xlsx",
+    f"{project_dir}/outputs/data/test_evaluation_results/wash_test_evaluation.xlsx",
     index=True,
 )
 

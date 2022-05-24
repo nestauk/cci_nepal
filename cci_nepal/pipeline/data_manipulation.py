@@ -3,7 +3,7 @@
 # Import libraries
 import pandas as pd
 import numpy as np
-from cci_nepal.pipeline.classification_model import nfri_list_file as nlf
+from cci_nepal.pipeline import nfri_list_file as nlf
 
 
 def label_transformer(d):

@@ -20,26 +20,23 @@ import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 import warnings
+import logging
 from sklearn.utils import shuffle
 from pathlib import Path
 
-warnings.filterwarnings("ignore")
-from cci_nepal.getters.classification_model import get_data as grd
+from cci_nepal.getters import get_data as grd
 
 # Set project directory
 project_dir = cci_nepal.PROJECT_DIR
 
 # Read in df
-df = grd.read_excel_file(f"{project_dir}/inputs/data/survey_data.xlsx")
-# df = pd.read_csv(f"{project_dir}/inputs/data/survey_data_dummy.csv")
-print("Shape pre outlier removal: ")
-print(df.shape)
+# df = grd.read_excel_file(f"{project_dir}/inputs/data/survey_data.xlsx")
+df = grd.read_complete_data()
+
+# df = grd.read_dummy_data()  # Read this for dummy data
 
 df = df[df.iloc[:, 6:16].sum(axis=1) < 11]
 df = df[df.iloc[:, 17:27].sum(axis=1) < 11]
-
-print("Shape post outlier removal: ")
-print(df.shape)
 
 # Sort to ensure the order is consistent each time before splitting
 df.sort_values(by="_index", inplace=True)
@@ -60,34 +57,24 @@ Path(f"{project_dir}/outputs/data/data_for_modelling/").mkdir(
     parents=True, exist_ok=True
 )
 
-# Write into csv files
-train_hill.to_csv(
-    f"{project_dir}/outputs/data/data_for_modelling/train_hill.csv", index=False
-)
-test_hill.to_csv(
-    f"{project_dir}/outputs/data/data_for_modelling/test_hill.csv", index=False
-)
-train_terai.to_csv(
-    f"{project_dir}/outputs/data/data_for_modelling/train_terai.csv", index=False
-)
-test_terai.to_csv(
-    f"{project_dir}/outputs/data/data_for_modelling/test_terai.csv", index=False
-)
-
 # Split train - train/validation
 train_hill, val_hill = train_test_split(train_hill, test_size=0.1, random_state=42)
 train_terai, val_terai = train_test_split(train_terai, test_size=0.1, random_state=42)
 # Group hill and plain
 train = pd.concat([train_hill, train_terai], ignore_index=True)
 val = pd.concat([val_hill, val_terai], ignore_index=True)
+test = pd.concat([test_hill, test_terai], ignore_index=True)
 
 # Re-shuffle sets
 train = shuffle(train, random_state=1)
 # Re-shuffle sets
 val = shuffle(val, random_state=1)
+# Re-shuffle sets
+test = shuffle(test, random_state=1)
 
 train.shape
 
 # Save train and val sets
 train.to_csv(f"{project_dir}/outputs/data/data_for_modelling/train.csv", index=False)
 val.to_csv(f"{project_dir}/outputs/data/data_for_modelling/val.csv", index=False)
+test.to_csv(f"{project_dir}/outputs/data/data_for_modelling/test.csv", index=False)

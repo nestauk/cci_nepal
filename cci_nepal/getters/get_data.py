@@ -3,6 +3,10 @@
 import pandas as pd
 import csv
 
+# Set the project directory
+import cci_nepal
+
+project_dir = cci_nepal.PROJECT_DIR
 
 # %%
 # Read Excel file
@@ -24,6 +28,32 @@ def get_lists(file):
         for row in csv.reader(inputfile):
             results.append(row[0])
     return results
+
+
+def read_train_data():
+    return pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/train.csv")
+
+
+def read_val_data():
+    return pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/val.csv")
+
+
+def read_test_data():
+    return pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/test.csv")
+
+
+def read_dummy_data():
+    return pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/dummy_data.csv")
+
+
+def read_complete_data():
+    return pd.read_excel(f"{project_dir}/inputs/data/survey_data.xlsx")
+
+
+def read_free_text_activity_data():
+    return pd.read_csv(
+        f"{project_dir}/inputs/data/free_text_analysis/free_text_activity_combined_result.csv"
+    )
 
 
 # %%

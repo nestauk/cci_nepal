@@ -43,9 +43,9 @@ import pickle
 
 # Project libraries
 import cci_nepal
-from cci_nepal.getters.classification_model import get_data as grd
-from cci_nepal.pipeline.classification_model import data_manipulation as dm
-from cci_nepal.pipeline.classification_model import model_tuning_report as mtr
+from cci_nepal.getters import get_data as grd
+from cci_nepal.pipeline import data_manipulation as dm
+from cci_nepal.pipeline import model_tuning_report as mtr
 
 # %%
 # Set the project directory
@@ -149,13 +149,13 @@ results_basic, results_non_basic = mtr.test_all_models(
 # %%
 # Save results to outputs/data/model_results
 with open(
-    f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic_filtered_features.pkl",
+    f"{project_dir}/outputs/data/model_results/features_params_scores_wash_filtered_features.pkl",
     "wb",
 ) as f:
     pickle.dump(results_non_basic, f)
 
 with open(
-    f"{project_dir}/outputs/data/model_results/features_params_scores_basic_filtered_features.pkl",
+    f"{project_dir}/outputs/data/model_results/features_params_scores_shelter_filtered_features.pkl",
     "wb",
 ) as f:
     pickle.dump(results_basic, f)

@@ -38,10 +38,10 @@ project_dir = cci_nepal.PROJECT_DIR
 
 # %%
 basic_results_train = pd.read_pickle(
-    f"{project_dir}/outputs/data/model_results/features_params_scores_basic_filtered_features.pkl"
+    f"{project_dir}/outputs/data/model_results/features_params_scores_shelter_filtered_features.pkl"
 )
 non_basic_results_train = pd.read_pickle(
-    f"{project_dir}/outputs/data/model_results/features_params_scores_non_basic_filtered_features.pkl"
+    f"{project_dir}/outputs/data/model_results/features_params_scores_wash_filtered_features.pkl"
 )
 
 # %% [markdown]

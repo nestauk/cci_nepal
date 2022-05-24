@@ -16,3 +16,5 @@ geopandas
 geopy
 geocoder
 openpyxl
+nltk
+worldcloud

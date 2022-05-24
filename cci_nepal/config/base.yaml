@@ -16,5 +16,5 @@ final_model:
     ]
 
   solver: "liblinear"
-  penalty_basic: "l2"
-  penalty_non_basic: "l1"
+  penalty_shelter: "l2"
+  penalty_wash: "l1"

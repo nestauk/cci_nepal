@@ -4,7 +4,7 @@
 
 ## Welcome!
 
-This repository contains the code and documentation for a collective crisis intellegence project with the Nepal Red Cross that looks at finding the optimum Non-food-related-items (NFRI) for different households.
+This repository contains the code and documentation for a project uses Collective Crisis Intellegence (CCI) to help the Nepal Red Cross find the optimum Non-food-related-items (NFRI) for different households.
 
 ### Background
 
@@ -118,31 +118,23 @@ Split the survey data into training / validation and test sets
 
 ```shell
 $ cd cci_nepal/pipeline
-$ python3 data_splitting.py
+$ python3 data_splitting_survey.py
 ```
 
 #### Outputs
 
 There are six files created from running the `data_splitting.py` file. These are saved in `outputs/data/data_for_modelling` and are listed below. These form the training, validation and test sets used for modelling.
 
-Training sets
-
 - `train.csv`
 - `train_hill.csv`
 - `train_terai.csv`
 
-Test sets
-
-- `val.csv`
-- `test_hill.csv`
-- `test_terai.csv`
-
 Move into the `model_workflow` folder and run the following file to train, save and run the models.
 
 ```shell
-$ cd cci_nepal/pipeline/model_run
+$ cd cci_nepal/pipeline/model_workflow
 $ python3 model_save.py
-$ python3 model_run.py
+$ python3 model_test.py
 ```
 
 ### Final Outputs
@@ -150,7 +142,7 @@ $ python3 model_run.py
 There are two files created from running the models and saved to outputs:
 
 - `shelter_test_predictions.xlsx`
-- `dignity_test_predictions.xlsx`
+- `wash_test_predictions.xlsx`
 
 These contain the survey inputs and predictions for each basic and non-basic NFRI items respectively. The format of each file will be slighlty different as different numbers of features are used and the NFRI outputs are different. The first set of columns will contain the feature names and the next set will contain the NFRI items with a 0 to 1 probability as to whether they are the item is essential.
 

@@ -126,8 +126,8 @@ $ python3 data_splitting_survey.py
 There are six files created from running the `data_splitting.py` file. These are saved in `outputs/data/data_for_modelling` and are listed below. These form the training, validation and test sets used for modelling.
 
 - `train.csv`
-- `train_hill.csv`
-- `train_terai.csv`
+- `val.csv`
+- `test.csv`
 
 Move into the `model_workflow` folder and run the following file to train, save and run the models.
 

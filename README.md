@@ -131,7 +131,7 @@ $ python3 dummy_data.py
 
 Running the `dummy_data.py` file saves a dummy version of the data you can use for modelling. The values are assigned randomly from the list of values for each column.
 
-`dummy_data.py`\* saved in `inputs/data`.
+`dummy_data.xlsx`\* saved in `inputs/data`.
 
 \*this is the default file used when you clone the repo. If you change the config `file` variable in option A you just need to remember to change it back to `dummy_data` if you want to re-run the script using your generated dummy data.
 
@@ -148,7 +148,7 @@ $ python3 data_splitting_survey.py
 
 #### Outputs
 
-There are six files created from running the `data_splitting.py` file. These are saved in `outputs/data/data_for_modelling` and are listed below. These form the training, validation and test sets used for modelling.
+There are three files created from running the `data_splitting.py` file. These are saved in `outputs/data/data_for_modelling` and are listed below. These form the training, validation and test sets used for modelling.
 
 - `train.csv`
 - `val.csv`
@@ -164,10 +164,12 @@ $ python3 model_test.py
 
 ### Final Outputs
 
-There are two files created from running the models and saved to outputs:
+There are four files created from running the models and saved to `outputs/data/test_evaluation_results`:
 
 - `shelter_test_predictions.xlsx`
 - `wash_test_predictions.xlsx`
+- `shelter_test_evaluation.xlsx`
+- `wash_test_evaluation.xlsx`
 
 These contain the survey inputs and predictions for each basic and non-basic NFRI items respectively. The format of each file will be slighlty different as different numbers of features are used and the NFRI outputs are different. The first set of columns will contain the feature names and the next set will contain the NFRI items with a 0 to 1 probability as to whether they are the item is essential.
 

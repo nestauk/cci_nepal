@@ -102,9 +102,11 @@ The below two options depend on if you have access to real survey data or need t
 ### OPTION A - With access to the real survey data
 
 **Step 1: Save the file into `inputs/data`**
+<br>
 When saving your file make sure to save it in `xlsx` format.
 
 **Step 2: Update the file name in config**
+<br>
 Navigate to `cci_nepal/config` and open the `base.yaml` file. In that file you will see the below `file` variable:
 
 ```shell

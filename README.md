@@ -97,7 +97,7 @@ $ cd cci_nepal
 
 To note the project is setup using the Nesta Cookiecutter (guidelines on the Nesta Cookiecutter can be [found here](https://nestauk.github.io/ds-cookiecutter/structure/)).
 
-The below two steps depend on if you have access to real survey data or need to generate dummy data to save and run the model.
+The below two options depend on if you have access to real survey data or need to generate dummy data to save and run the model.
 
 ### OPTION A - With access to the real survey data
 

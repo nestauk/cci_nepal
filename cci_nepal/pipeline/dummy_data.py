@@ -104,4 +104,4 @@ df_dummy.columns = column_names
 
 # Write the dummy data file
 df_dummy.to_excel(f"{project_dir}/inputs/data/dummy_data.xlsx", index=False)
-logging.info("Dummy data is created and stored in the outputs folder.")
+logging.info("Dummy data is created and stored in the inputs folder.")

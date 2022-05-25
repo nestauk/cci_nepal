@@ -44,7 +44,9 @@ def read_test_data():
 
 
 def read_complete_data():
-    return pd.read_excel(f"{project_dir}/inputs/data/" + config["data"]["file"])
+    return pd.read_excel(
+        f"{project_dir}/inputs/data/" + config["data"]["file"] + ".xlsx"
+    )
 
 
 def read_free_text_activity_data():

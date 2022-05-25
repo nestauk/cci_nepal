@@ -1,3 +1,6 @@
+data:
+  file: "dummy_data.xlsx"
+
 final_model:
   model_features:
     [

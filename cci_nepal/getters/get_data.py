@@ -5,6 +5,7 @@ import csv
 
 # Set the project directory
 import cci_nepal
+from cci_nepal import config
 
 project_dir = cci_nepal.PROJECT_DIR
 
@@ -42,12 +43,8 @@ def read_test_data():
     return pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/test.csv")
 
 
-def read_dummy_data():
-    return pd.read_csv(f"{project_dir}/outputs/data/data_for_modelling/dummy_data.csv")
-
-
 def read_complete_data():
-    return pd.read_excel(f"{project_dir}/inputs/data/survey_data.xlsx")
+    return pd.read_excel(f"{project_dir}/inputs/data/" + config["data"]["file"])
 
 
 def read_free_text_activity_data():

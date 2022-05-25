@@ -26,14 +26,12 @@ from pathlib import Path
 
 from cci_nepal.getters import get_data as grd
 
+
 # Set project directory
 project_dir = cci_nepal.PROJECT_DIR
 
-# Read in df
-# df = grd.read_excel_file(f"{project_dir}/inputs/data/survey_data.xlsx")
-df = grd.read_complete_data()
 
-# df = grd.read_dummy_data()  # Read this for dummy data
+df = grd.read_complete_data()
 
 df = df[df.iloc[:, 6:16].sum(axis=1) < 11]
 df = df[df.iloc[:, 17:27].sum(axis=1) < 11]

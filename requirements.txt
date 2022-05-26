@@ -17,4 +17,4 @@ geopy
 geocoder
 openpyxl
 nltk
-worldcloud
+wordcloud

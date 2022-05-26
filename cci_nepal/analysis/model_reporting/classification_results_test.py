@@ -30,6 +30,7 @@ from cci_nepal.pipeline import data_manipulation as dm
 from cci_nepal.pipeline import model_tuning_report as mtr
 from cci_nepal import config
 import joblib
+from pathlib import Path
 
 # %%
 # Set the project directory
@@ -183,6 +184,10 @@ for cm, item in zip(cm_non_basic, non_basic):
 
     print("--")
     print(" ")
+
+
+# Add folder if not already created
+Path(f"{project_dir}/outputs/figures/cm/").mkdir(parents=True, exist_ok=True)
 
 # %%
 print("Shelter items")

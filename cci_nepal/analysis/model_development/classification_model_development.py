@@ -40,6 +40,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 import pickle
+from pathlib import Path
 
 # Project libraries
 import cci_nepal
@@ -145,6 +146,9 @@ results_basic, results_non_basic = mtr.test_all_models(
     y_train_basic,
     y_train_non_basic,
 )
+
+# Add folder if not already created
+Path(f"{project_dir}/outputs/data/model_results/").mkdir(parents=True, exist_ok=True)
 
 # %%
 # Save results to outputs/data/model_results

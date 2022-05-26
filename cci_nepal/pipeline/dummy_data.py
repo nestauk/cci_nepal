@@ -9,6 +9,7 @@ import pandas as pd
 import numpy as np
 import random
 import logging
+from pathlib import Path
 
 from cci_nepal.getters import get_data as grd
 
@@ -101,6 +102,9 @@ for i in range(0, 11):
 df_dummy.iloc[:, 43:54] = np.transpose(nfri_preference_list)
 df_dummy.iloc[:, 56:67] = np.transpose(nfri_preference_list)
 df_dummy.columns = column_names
+
+# Add folder if not already created
+Path(f"{project_dir}/inputs/data/").mkdir(parents=True, exist_ok=True)
 
 # Write the dummy data file
 df_dummy.to_excel(f"{project_dir}/inputs/data/dummy_data.xlsx", index=False)

@@ -1,3 +1,5 @@
+<!-- #region -->
+
 # Collective Crisis Intelligence Project for The Nepal Red Cross
 
 **_Public repository for hosting the technical outputs of the CCI Nepal project._**
@@ -64,15 +66,15 @@ The first two sections are used for modelling where the first is our X features 
 
 The below table depicts the final features used by the model with their data type and a brief description.
 
-| Column name        | Description | Type  |
-| :----------------- | :---------- | :---- |
-| household_size     | Description | int   |
-| percent_non_male   | Description | float |
-| children_under_5   | Description | int   |
-| income_gen_ratio   | Description | float |
-| health_difficulty  | Description | int   |
-| sindupalchowk      | Description | int   |
-| household_material | Description | str   |
+| Column name        | Description                                                                                                                                                                            | Type  |
+| :----------------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---- |
+| household_size     | Count of total members in a household across all age groups.                                                                                                                           | int   |
+| percent_non_male   | Percentage of total non male members in a household.                                                                                                                                   | float |
+| children_under_5   | A binary variable that represents if a household has any member less than age 5 or not. 1 representing yes and 0 representing no.                                                      | int   |
+| income_gen_ratio   | Ratio of total income generating members in a household.                                                                                                                               | float |
+| health_difficulty  | Count of total members in a household with heath difficulty.                                                                                                                           | int   |
+| sindupalchowk      | A binary variable that represents if the district of the household is Sindupalchowk (represented as 1) or Mahottari (represented as 0), two districts that are present in the dataset. | int   |
+| household_material | A categorical variable representing the house material (Wooden pillar, RCC pillar, Bricks and stone, etc. )                                                                            | str   |
 
 ## Installation
 
@@ -95,7 +97,28 @@ $ cd cci_nepal
 
 To note the project is setup using the Nesta Cookiecutter (guidelines on the Nesta Cookiecutter can be [found here](https://nestauk.github.io/ds-cookiecutter/structure/)).
 
-### Create a dummy dataset
+The below two options depend on if you have access to real survey data or need to generate dummy data to save and run the model.
+
+### OPTION A - With access to the real survey data
+
+**Step 1: Save the file into `inputs/data`**
+<br>
+When saving your file make sure to save it in `xlsx` format.
+
+**Step 2: Update the file name in config**
+<br>
+Navigate to `cci_nepal/config` and open the `base.yaml` file. In that file you will see the below `file` variable:
+
+```shell
+data:
+  file: "dummy_data"
+```
+
+Change the value from `dummy_data` to the name of your file.
+
+### OPTION B - Without access to the real survey data
+
+#### Create a dummy dataset
 
 Run the below python file to create and save a dummy dataset that can be used for modelling. This is based on the questions used in our survey.
 
@@ -104,11 +127,13 @@ $ cd cci_nepal/pipeline
 $ python3 dummy_data.py
 ```
 
-#### Outputs
+##### Outputs
 
-Running the `dummy_data.py` file saves a dummy version of the data you can use for modelling.
+Running the `dummy_data.py` file saves a dummy version of the data you can use for modelling. The values are assigned randomly from the list of values for each column.
 
-`survey_data.py` saved in `inputs/data`.
+`dummy_data.xlsx`\* saved in `inputs/data`.
+
+\*this is the default file used when you clone the repo. If you change the config `file` variable in option A you just need to remember to change it back to `dummy_data` if you want to re-run the script using your generated dummy data.
 
 ### Save and run the models
 
@@ -123,7 +148,7 @@ $ python3 data_splitting_survey.py
 
 #### Outputs
 
-There are six files created from running the `data_splitting.py` file. These are saved in `outputs/data/data_for_modelling` and are listed below. These form the training, validation and test sets used for modelling.
+There are three files created from running the `data_splitting.py` file. These are saved in `outputs/data/data_for_modelling` and are listed below. These form the training, validation and test sets used for modelling.
 
 - `train.csv`
 - `val.csv`
@@ -139,12 +164,14 @@ $ python3 model_test.py
 
 ### Final Outputs
 
-There are two files created from running the models and saved to outputs:
+There are four files created from running the models and saved to `outputs/data/test_evaluation_results`:
 
 - `shelter_test_predictions.xlsx`
 - `wash_test_predictions.xlsx`
+- `shelter_test_evaluation.xlsx`
+- `wash_test_evaluation.xlsx`
 
-These contain the survey inputs and predictions for each basic and non-basic NFRI items respectively. The format of each file will be slighlty different as different numbers of features are used and the NFRI outputs are different. The first set of columns will contain the feature names and the next set will contain the NFRI items with a 0 to 1 probability as to whether they are the item is essential.
+These contain the survey predictions and evaluation metrics for each shelter and wash/dignity NFRI items respectively. For the prediction files, the first set of columns will contain the feature names and the next set will contain the NFRI items with a 0 to 1 probability as to whether they are the item is essential.
 
 ## Directory structure
 
@@ -174,3 +201,5 @@ The repository has the following main directories:
       ...
 
 ```
+
+<!-- #endregion -->

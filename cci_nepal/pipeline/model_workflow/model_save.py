@@ -119,6 +119,8 @@ logr_nb = MultiOutputClassifier(
 # Apply column transformer
 X_train = transformer.fit_transform(X_train)
 
+# Add folder if not already created
+Path(f"{project_dir}/outputs/models/").mkdir(parents=True, exist_ok=True)
 
 # %%
 # Save fitted transformer to disk

@@ -45,8 +45,8 @@ Find out more about the project in our report 'title of the report' [insert link
 
 `Published on July xx, 2022`
 
-- [**Model workflow**](https://github.com/nestauk/cci_nepal/tree/15_model_pipeline/cci_nepal/pipeline/classification_model/model_save_run): Python code for train the models and then running on the test set.
-- [**Free text analysis**](https://github.com/nestauk/cci_nepal/tree/15_model_pipeline/cci_nepal/analysis): Analysis of the survey questions asking participants for suggestions of new NFRI items.
+- [**Model workflow**](https://github.com/nestauk/cci_nepal/tree/15_model_pipeline/cci_nepal/pipeline/model_workflow): Python code for train the models and then running on the test set.
+- [**Free text analysis**](https://github.com/nestauk/cci_nepal/tree/15_model_pipeline/cci_nepal/analysis/free_text_analysis): Analysis of the survey questions asking participants for suggestions of new NFRI items.
 
 ## Data
 

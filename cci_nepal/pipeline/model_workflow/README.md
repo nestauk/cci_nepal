@@ -1,6 +1,6 @@
 # Training and running the models
 
-The python scripts in this folder can be used to train and test the NFRI predict models on new data. The first script `model_save.py` fits the x2 models (Shelter and Wash NFRI's) on the whole training set using the best model and parameters found in the model development stage and saves the fitted models to disk. The second script `model_test.py` loads the models and uses them to predict on a new data (the held out test set by default). 
+The python scripts in this folder can be used to train and test the NFRI predict models on new data. The first script `model_save.py` fits the two models (Shelter and Wash NFRI's) on the whole training set using the best model and parameters found in the model development stage and saves the fitted models to disk. The second script `model_test.py` loads the models and uses them to predict on a new data (the held out test set by default). 
 
 ### Save and run the models
 

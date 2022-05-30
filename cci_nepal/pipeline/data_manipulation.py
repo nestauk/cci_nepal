@@ -156,6 +156,7 @@ def feature_creation(df):
         ((df.income_generating_members / df.household_size) * 100),
     )
     df.insert(7, "health_difficulty", df.iloc[:, [29, 30, 31, 32, 33, 34]].sum(axis=1))
+    df["health_difficulty"] = np.where(df.health_difficulty > 0, 1, 0)
     df["respondent_female"] = np.where(df.respondent_gender == "female", 1, 0)
     df["sindupalchowk"] = np.where(df.district == "sindupalchok", 1, 0)
     df.income_gen_ratio = df.income_gen_ratio.replace(np.inf, np.nan)

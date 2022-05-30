@@ -4,7 +4,7 @@ The python scripts in this folder can be used to train and test the NFRI predict
 
 ### Save and run the models
 
-*Prior to running the scripts in this folder you will need to follow the steps in the main readme to install the repository and access / save the survey data.*
+*Prior to running the scripts in this folder you will need to follow the steps in the [main readme](https://github.com/nestauk/cci_nepal/tree/15_model_pipeline#installation)) to install the repository and access / save the survey data.*
 
 Perform the following steps to train, save and run the models on a held out test set. 
 

@@ -3,39 +3,82 @@
 <br>
 <br>
 
-The python scripts in this folder can be used to train and run the NFRI predict models on new data. The first script `model_save.py` fits the x2 models (basic and non-basic NFRI's) on the whole training set using the best model and parameters found in the model development stage and saves the fitted models to disk. The second script `model_run.py` loads the models and uses them to predict on a new data (the held out test set by default).
-
-Before feeding data into the models, a few different pre-processing and cleaning steps are taken on the data to make sure it is in the right format. These steps are all held in functions saved in `data_manipulation.py` and `model_tuning_report.py` scripts found in `pipeline/classfication_model/`.
+The python scripts in this folder can be used to train and test the NFRI predict models on new data. The first script `model_save.py` fits the x2 models (Shelter and Wash NFRI's) on the whole training set using the best model and parameters found in the model development stage and saves the fitted models to disk. The second script `model_test.py` loads the models and uses them to predict on a new data (the held out test set by default).
 
 ### Steps to take before runnning
 
-To run the models you will first need to setup the project. Follow the below two steps to do this:
+The below two options depend on if you have access to real survey data or need to generate dummy data to save and run the model.
 
-1. Clone the project and cd into the `cci_nepal` directory
-2. Run the command `make install` to create the virtual environment and install dependencies
-3. Inside the project directory run `make inputs-pull` to access the data from S3 (for those with access to the Nesta S3 account)
+### OPTION A - With access to the real survey data
 
-To note the project is setup using the Nesta Cookiecutter (guidelines on the Nesta Cookiecutter can be [found here](https://nestauk.github.io/ds-cookiecutter/structure/)).
+**Step 1: Save the file into `inputs/data`**
+<br>
+When saving your file make sure to save it in `xlsx` format.
 
-### Input needed
+**Step 2: Update the file name in config**
+<br>
+Navigate to `cci_nepal/config` and open the `base.yaml` file. In that file you will see the below `file` variable:
 
-After you setup the project you will need your training and test datasets. To build our models we used new data collected by the Nepal Red Cross in two districts - Sindhupalchok and Mahottari. The raw data from these surveys are saved in `cci_nepal/inputs/data/real_data/Full_Data_District.csv`. Running the script `data_splitting_survey.py` in `pipeline/classfication_model/` produces the training and test dataset.
+```shell
+data:
+  file: "dummy_data"
+```
 
-To run the scripts the data needs to be in the same format as the survey data collected and saved in `cci_nepal/outputs/data/data_for_modelling/`.
+Change the value from `dummy_data` to the name of your file.
 
-### Run the scripts
+### OPTION B - Without access to the real survey data
 
-Perform the following steps to run the scripts:
+#### Create a dummy dataset
 
-- `cd` to inside this folder
-- run `python3 model_save.py`
-- run `python3 model_run.py`
+Run the below python file to create and save a dummy dataset that can be used for modelling. This is based on the questions used in our survey.
 
-### Outputs
+```shell
+$ cd cci_nepal/pipeline
+$ python3 dummy_data.py
+```
 
-There are two files created from running the models and saved to outputs:
+##### Outputs
 
-- `basic_test_predictions.xlsx`
-- `non_basic_test_predictions.xlsx`
+Running the `dummy_data.py` file saves a dummy version of the data you can use for modelling. The values are assigned randomly from the list of values for each column.
 
-These contain the survey inputs and predictions for each basic and non-basic NFRI items respectively. The format of each file will be slighlty different as different numbers of features are used and the NFRI outputs are different. The first set of columns will contain the feature names and the next set will contain the NFRI items with a 0 to 1 probability as to whether they are the item is essential.
+`dummy_data.xlsx`\* saved in `inputs/data`.
+
+\*this is the default file used when you clone the repo. If you change the config `file` variable in option A you just need to remember to change it back to `dummy_data` if you want to re-run the script using your generated dummy data.
+
+### Save and run the models
+
+Perform the following steps to train and run the models:
+
+Split the survey data into training / validation and test sets
+
+```shell
+$ cd cci_nepal/pipeline
+$ python3 data_splitting_survey.py
+```
+
+#### Outputs
+
+There are three files created from running the `data_splitting.py` file. These are saved in `outputs/data/data_for_modelling` and are listed below. These form the training, validation and test sets used for modelling.
+
+- `train.csv`
+- `val.csv`
+- `test.csv`
+
+Move into the `model_workflow` folder and run the following file to train, save and run the models.
+
+```shell
+$ cd cci_nepal/pipeline/model_workflow
+$ python3 model_save.py
+$ python3 model_test.py
+```
+
+### Final Outputs
+
+There are four files created from running the models and saved to `outputs/data/test_evaluation_results`:
+
+- `shelter_test_predictions.xlsx`
+- `wash_test_predictions.xlsx`
+- `shelter_test_evaluation.xlsx`
+- `wash_test_evaluation.xlsx`
+
+These contain the survey predictions and evaluation metrics for each shelter and wash/dignity NFRI items respectively. For the prediction files, the first set of columns will contain the feature names and the next set will contain the NFRI items with a 0 to 1 probability as to whether they are the item is essential.

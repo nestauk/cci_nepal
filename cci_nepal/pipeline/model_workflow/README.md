@@ -1,53 +1,12 @@
 # Training and running the models
 
-<br>
-<br>
-
-The python scripts in this folder can be used to train and test the NFRI predict models on new data. The first script `model_save.py` fits the x2 models (Shelter and Wash NFRI's) on the whole training set using the best model and parameters found in the model development stage and saves the fitted models to disk. The second script `model_test.py` loads the models and uses them to predict on a new data (the held out test set by default).
-
-### Steps to take before runnning
-
-The below two options depend on if you have access to real survey data or need to generate dummy data to save and run the model.
-
-### OPTION A - With access to the real survey data
-
-**Step 1: Save the file into `inputs/data`**
-<br>
-When saving your file make sure to save it in `xlsx` format.
-
-**Step 2: Update the file name in config**
-<br>
-Navigate to `cci_nepal/config` and open the `base.yaml` file. In that file you will see the below `file` variable:
-
-```shell
-data:
-  file: "dummy_data"
-```
-
-Change the value from `dummy_data` to the name of your file.
-
-### OPTION B - Without access to the real survey data
-
-#### Create a dummy dataset
-
-Run the below python file to create and save a dummy dataset that can be used for modelling. This is based on the questions used in our survey.
-
-```shell
-$ cd cci_nepal/pipeline
-$ python3 dummy_data.py
-```
-
-##### Outputs
-
-Running the `dummy_data.py` file saves a dummy version of the data you can use for modelling. The values are assigned randomly from the list of values for each column.
-
-`dummy_data.xlsx`\* saved in `inputs/data`.
-
-\*this is the default file used when you clone the repo. If you change the config `file` variable in option A you just need to remember to change it back to `dummy_data` if you want to re-run the script using your generated dummy data.
+The python scripts in this folder can be used to train and test the NFRI predict models on new data. The first script `model_save.py` fits the x2 models (Shelter and Wash NFRI's) on the whole training set using the best model and parameters found in the model development stage and saves the fitted models to disk. The second script `model_test.py` loads the models and uses them to predict on a new data (the held out test set by default). 
 
 ### Save and run the models
 
-Perform the following steps to train and run the models:
+*Prior to running the scripts in this folder you will need to follow the steps in the main readme to install the repository and access / save the survey data.*
+
+Perform the following steps to train, save and run the models on a held out test set. 
 
 Split the survey data into training / validation and test sets
 

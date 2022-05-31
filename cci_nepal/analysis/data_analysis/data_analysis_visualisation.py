@@ -680,12 +680,10 @@ ax.set(
 )
 
 plt.savefig(
-    f"{project_dir}/outputs/figures/data_analysis/png/class_proportion_shelter_items.png",
-    bbox_inches="tight",
+    f"{project_dir}/outputs/figures/data_analysis/png/class_proportion_shelter_items.png"
 )
 plt.savefig(
-    f"{project_dir}/outputs/figures/data_analysis/svg/class_proportion_shelter_items.svg",
-    bbox_inches="tight",
+    f"{project_dir}/outputs/figures/data_analysis/svg/class_proportion_shelter_items.svg"
 )
 
 
@@ -1008,3 +1006,44 @@ df_numeric.groupby("previous_nfri")[non_basic].apply(lambda x: x.astype(int).mea
 
 # %% [markdown]
 # As we can see, for most of the items in basic, the preference score is higher for the No category (households that haven't received NFRI in past, coded as 0 in our script.) As for non basic, the scores are fairly similar except for Whistle Blow, which also also higher score for the No category.
+
+# %% [markdown]
+# #### Creating a map of Nepal  ####
+
+# %% [markdown]
+# This is an entirely option section where we visualise the points of survey responses.
+# Running the script below requires the library geopandas which is not part of the requirements.txt file.
+#
+
+
+import geopandas as gpd
+from shapely.geometry import *
+from geopandas import GeoDataFrame
+
+# Read Nepal map file
+nepal_shapefile = gpd.read_file("New_Local_Level_Map.shp")
+
+geometry = [Point(xy) for xy in zip(df["longitude"], df["latitude"])]
+shapefile_geo = gpd.GeoDataFrame(df, geometry=geometry)
+
+fig, ax = plt.subplots(figsize=(15, 15))
+nepal_shapefile.plot(ax=ax, alpha=0.9, color=c("nesta_green"))
+shapefile_geo[shapefile_geo["district"] == "Sindupalchok"].plot(
+    ax=ax, markersize=5, marker="o", color=c("nesta_blue"), label="Sindhupalchowk"
+)
+shapefile_geo[shapefile_geo["district"] == "Mahottari"].plot(
+    ax=ax, markersize=5, marker="o", color=c("nesta_red"), label="Mahottari"
+)
+
+plt.title("Location Points of Survey Responses")
+plt.xlabel("Longitude")
+plt.ylabel("Latitude")
+plt.legend(prop={"size": 16})
+plt.savefig(
+    f"{project_dir}/outputs/figures/data_analysis/png/nepal_map.png",
+    bbox_inches="tight",
+)
+plt.savefig(
+    f"{project_dir}/outputs/figures/data_analysis/svg/nepal_map.svg",
+    bbox_inches="tight",
+)

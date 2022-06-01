@@ -931,6 +931,20 @@ plt.savefig(
 # ### Fourth Part of Analysis: Analysing NFRI Preferences across different Input Variables ####
 
 # %% [markdown]
+# #### NFRI Preferences District Wise ####
+
+df_numeric.groupby("district")[basic].apply(lambda x: x.astype(int).mean()).iloc[
+    0:4,
+]
+
+df_numeric.groupby("district")[non_basic].apply(lambda x: x.astype(int).mean()).iloc[
+    0:4,
+]
+
+# %% [markdown]
+# As we can see, the preference scores are fairly same for both the districts for wash items. Whereas for shelter items, the clothing items have noticeably low scores for Sindupalchowk compared to Mahottari.
+
+# %% [markdown]
 # #### NFRI Preferences Respondent Gender Wise ####
 
 # %%

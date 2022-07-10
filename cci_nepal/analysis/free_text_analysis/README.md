@@ -5,7 +5,7 @@ The folder contains our analysis of the free text section of NFRI Survey data.
 #### Introduction
 
 In the community survey conducted in Mahottari and Sindhupalchok districts of Nepal, there were four questions asking respondents to give suggestions for new items that should be included in NFRI packages across the General, Women, Children and Health Difficulty categories.
-We used conditional formatting in Kobo, so that only the respondents who meet the criteria for a category would see the question.
+We used conditional formatting in the survey design so that only the respondents who meet the criteria for a category would see the question.
 For example, the question for Children would only come up in households with total children count greater than zero. Same regarding the question for Women (total women count greater than zero) and Health Difficulty (total health difficulty count greater than zero).
 
 #### Free Text Activity: Combining Machine Intelligence and Human Intelligence

@@ -140,8 +140,7 @@ Perform the following steps to train and run the models:
 Split the survey data into training / validation and test sets
 
 ```shell
-$ cd cci_nepal/pipeline
-$ python3 data_splitting_survey.py
+python  cci_nepal/pipeline/data_splitting_survey.py
 ```
 
 #### Outputs

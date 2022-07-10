@@ -107,7 +107,7 @@ When saving your file make sure to save it in `xlsx` format.
 <br>
 Navigate to `cci_nepal/config` and open the `base.yaml` file. In that file you will see the below `file` variable:
 
-```shell
+```yaml
 data:
   file: "dummy_data"
 ```

@@ -27,9 +27,7 @@ These packages are often distributed in the aftermath of a crisis based on an In
 - Identifying a better way of knowing what NFRI items to distribute and when
 - Exploring what new NFRI items community members are interested in
 
-In line with these needs, the project uses new data collected from surveying two districts in Nepal - Sindhupalchok and Mahottari.
-
-<b>Project aims:</b>
+In line with these needs, the project uses new data collected from surveying two districts in Nepal - Sindhupalchok and Mahottari to:
 
 1. Measure the extent to which different households perceive existing items as essential (also referred to as item “essentialness” henceforth), and
 2. Collect and summarise suggestions on new NFRI items to include in packages in case of a flood crisis.

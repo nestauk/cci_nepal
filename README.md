@@ -121,8 +121,7 @@ Change the value from `dummy_data` to the name of your file.
 Run the below python file to create and save a dummy dataset that can be used for modelling. This is based on the questions used in our survey.
 
 ```shell
-$ cd cci_nepal/pipeline
-$ python3 dummy_data.py
+python cci_nepal/pipeline/dummy_data.py
 ```
 
 ##### Outputs

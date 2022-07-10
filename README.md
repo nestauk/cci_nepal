@@ -155,6 +155,7 @@ Run the following modules to train, save and run the models.
 ```shell
 python cci_nepal/pipeline/model_workflow/model_save.py
 python cci_nepal/pipeline/model_workflow/model_test.py
+```
 
 ### Final Outputs
 

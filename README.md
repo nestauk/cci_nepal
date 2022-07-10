@@ -37,7 +37,7 @@ The analysis provided in this repository generates two outputs:
 1. A model that predicts item essentialness based on provided household information
 2. A stand alone piece of analysis showing what new items are suggested by households across different demographic features
 
-Find out more about the project in our report 'title of the report' [insert link].
+Find out more about the project in our report (coming soon).
 
 ## Contents
 
@@ -160,10 +160,10 @@ python cci_nepal/pipeline/model_workflow/model_test.py
 
 There are four files created from running the models and saved to `outputs/data/test_evaluation_results`:
 
-- `shelter_test_predictions.xlsx`
-- `wash_test_predictions.xlsx`
-- `shelter_test_evaluation.xlsx`
-- `wash_test_evaluation.xlsx`
+- `shelter_test_predictions.csv`
+- `wash_test_predictions.csv`
+- `shelter_test_evaluation.csv`
+- `wash_test_evaluation.csv`
 
 These contain the survey predictions and evaluation metrics for each shelter and wash/dignity NFRI items respectively. For the prediction files, the first set of columns will contain the feature names and the next set will contain the NFRI items with a 0 to 1 probability as to whether they are the item is predicted as essential.
 

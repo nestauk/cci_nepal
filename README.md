@@ -58,7 +58,7 @@ This project uses new survey data collected from two districts in Nepal - Sindhu
 2. <b>NFRI preferences of the household in a flood crisis</b>: The second section asks the respondent to imagine a new flood crisis and asks them to state how important they see each NFRI item already distributed by the Red Cross.
 3. <b>New NFRI items</b>: The final section asks the respondent to suggest new NFRI items their household might need in a flood crisis that are not listed in section 2.
 
-The first two sections are used for modelling where the first is our X features and the second our Y output variables. This last section is not used for modelling but for a one-off piece of analysis for the Red Cross to help them understand what new items are requested by different groups.
+The first two sections are used for modelling where the first provides the features and the second provides our target (output) variables. The last section is not used for modelling but for a one-off piece of analysis for NRCS to help them understand new items that different groups might need.
 
 ### Data dictionary of final features
 

@@ -50,7 +50,7 @@ Find out more about the project in our report 'title of the report' [insert link
 
 This project uses new survey data collected from two districts in Nepal - Sindhupalchok and Mahottari. These districts were selected as they capture information from both the Hill and Plain regions in Nepal. Both districts are among the most flood affected districts of Nepal and have received NFRI from the NRC in the past. To design the survey we worked with members of the Red Cross and IFRC teams to develop the questions and ensure they were accessible.
 
-3,265 responses were collected from a 50/50 split across male and female respondents. Random sampling was then used for the respondents collected within each gender.
+3,265 responses were collected with a 50/50 split between male and female respondents, but otherwise using random sampling from households within the regions.
 
 <b>The survey was split into three sections</b>
 

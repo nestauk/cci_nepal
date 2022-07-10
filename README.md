@@ -165,7 +165,7 @@ There are four files created from running the models and saved to `outputs/data/
 - `shelter_test_evaluation.xlsx`
 - `wash_test_evaluation.xlsx`
 
-These contain the survey predictions and evaluation metrics for each shelter and wash/dignity NFRI items respectively. For the prediction files, the first set of columns will contain the feature names and the next set will contain the NFRI items with a 0 to 1 probability as to whether they are the item is essential.
+These contain the survey predictions and evaluation metrics for each shelter and wash/dignity NFRI items respectively. For the prediction files, the first set of columns will contain the feature names and the next set will contain the NFRI items with a 0 to 1 probability as to whether they are the item is predicted as essential.
 
 ## Directory structure
 

@@ -150,13 +150,11 @@ There are three files created from running the `data_splitting.py` file. These a
 - `val.csv`
 - `test.csv`
 
-Move into the `model_workflow` folder and run the following file to train, save and run the models.
+Run the following modules to train, save and run the models.
 
 ```shell
-$ cd cci_nepal/pipeline/model_workflow
-$ python3 model_save.py
-$ python3 model_test.py
-```
+python cci_nepal/pipeline/model_workflow/model_save.py
+python cci_nepal/pipeline/model_workflow/model_test.py
 
 ### Final Outputs
 

@@ -216,22 +216,22 @@ Path(f"{project_dir}/outputs/data/test_evaluation_results/").mkdir(
 # )
 
 
-basic_preds.to_excel(
-    f"{project_dir}/outputs/data/test_evaluation_results/shelter_test_predictions.xlsx",
+basic_preds.to_csv(
+    f"{project_dir}/outputs/data/test_evaluation_results/shelter_test_predictions.csv",
     index=False,
 )
-non_basic_preds.to_excel(
-    f"{project_dir}/outputs/data/test_evaluation_results/wash_test_predictions.xlsx",
+non_basic_preds.to_csv(
+    f"{project_dir}/outputs/data/test_evaluation_results/wash_test_predictions.csv",
     index=False,
 )
 
 
-evaluation_metric_basic.to_excel(
-    f"{project_dir}/outputs/data/test_evaluation_results/shelter_test_evaluation.xlsx",
+evaluation_metric_basic.to_csv(
+    f"{project_dir}/outputs/data/test_evaluation_results/shelter_test_evaluation.csv",
     index=True,
 )
-evaluation_metric_non_basic.to_excel(
-    f"{project_dir}/outputs/data/test_evaluation_results/wash_test_evaluation.xlsx",
+evaluation_metric_non_basic.to_csv(
+    f"{project_dir}/outputs/data/test_evaluation_results/wash_test_evaluation.csv",
     index=True,
 )
 

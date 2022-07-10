@@ -76,7 +76,7 @@ The below table depicts the final features used by the model with their data typ
 
 ## Installation
 
-Unfortunately the dataset is not publicly available due to it being a survey collected directly by the Red Cross (more information here).
+Unfortunately the dataset is not publicly available due to it being a survey collected directly by the Red Cross and it containing sensitive data (more information here).
 
 However, we have created a script that generates dummy data that allows you to test the running of `model workflow`. Follow the steps below to generate the dummy data and run the code.
 

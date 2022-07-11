@@ -10,7 +10,7 @@ This repository contains the code and documentation for a project uses Collectiv
 
 ### Background
 
-After a crisis strikes, people can be left without important supplies that support them to stay safe, healthy and comfortable. As part of coordinated efforts with other governmental and non-governmental organisations, the Nepal Red Cross Society (NRCS) provides Non-Food Related Items (NFRI) packages to affected communities.
+After a crisis strikes, people can be left without important supplies that support them to stay safe, healthy and comfortable. As part of coordinated efforts with other governmental and non-governmental organisations, [the Nepal Red Cross Society (NRCS)](https://nrcs.org/) provides Non-Food Related Items (NFRI) packages to affected communities.
 
 A typical family NFRI package includes:
 

@@ -41,10 +41,11 @@ Find out more about the project in our report (coming soon).
 
 ## Contents
 
-`Published on July xx, 2022`
+`Published on July 14, 2022`
 
 - [**Model workflow**](https://github.com/nestauk/cci_nepal/tree/15_model_pipeline/cci_nepal/pipeline/model_workflow): Python code for train the models and then running on the test set.
 - [**NFRI suggestion analysis**](https://github.com/nestauk/cci_nepal/tree/15_model_pipeline/cci_nepal/analysis/free_text_analysis): Analysis of the free text survey responses asking participants for suggestions of new NFRI items.
+- **Technical Specifications \& XD Files**: Comprehensive technical specifications for tool frontend and backend with proposed implementation.
 
 ## Data
 
@@ -168,6 +169,10 @@ There are four files created from running the models and saved to `outputs/data/
 
 These contain the survey predictions and evaluation metrics for each shelter and wash/dignity NFRI items respectively. For the prediction files, the first set of columns will contain the feature names and the next set will contain the NFRI items with a 0 to 1 probability as to whether they are the item is predicted as essential.
 
+## Technical Specifications
+
+The model contained within this repository were incorporated within wider technical architecture within the NFRI-Predict tool. This tool was evaluated using a high-fidelity prototype, and a technical specification is enclosed within this repository `reports/technical-spec` which outlines a proposed implementation of the wider tool architecture and how the model can be integrated. There is also an Adobe XD file included which shows the prototype tool.
+
 ## Directory structure
 
 The repository has the following main directories:
@@ -193,6 +198,8 @@ The repository has the following main directories:
       ├── data
       │   └── data_for_modelling      <- Training, validation and test sets saved here
       ├── models                      <- Saved models after running model_workflow
+      ├── reports
+          └── technical-spec          <- Technical specification and XD files for tool implementation
       ...
 
 ```

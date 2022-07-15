@@ -71,7 +71,7 @@ The below table depicts the final features used by the model with their data typ
 | percent_non_male   | Percentage of total non male members in a household.                                                                                                                                   | float |
 | children_under_5   | A binary variable that represents if a household has any member less than age 5 or not. 1 representing yes and 0 representing no.                                                      | int   |
 | income_gen_ratio   | Ratio of total income generating members in a household.                                                                                                                               | float |
-| health_difficulty  | A binary variable that represents if a household has any members with a heath difficulty.                                                                                                                           | int   |
+| health_difficulty  | A binary variable that represents if a household has any members with a heath difficulty.                                                                                              | int   |
 | sindupalchowk      | A binary variable that represents if the district of the household is Sindupalchowk (represented as 1) or Mahottari (represented as 0), two districts that are present in the dataset. | int   |
 | household_material | A categorical variable representing the house material (Wooden pillar, RCC pillar, Bricks and stone, etc. )                                                                            | str   |
 
@@ -203,5 +203,11 @@ The repository has the following main directories:
       ...
 
 ```
+
+## Contact and Contributions
+
+This repository is maintained by the Data Analytics Practice team at [Nesta](https://www.nesta.org.uk/). The CCI Nepal project is an ‘Accelerated Innovation Collaboration’ (AIC) which was delivered by Nesta’s Centre for Collective Intelligence Design (CCID) and Data Analytics Practice (DAP), UK HIH, [Open Lab](https://openlab.ncl.ac.uk/), [IFRC Red Crescent Societies - Solferino Academy](https://solferinoacademy.com/), [Cameroon Red Cross Society](https://www.icrc.org/en/where-we-work/africa/cameroon) and [Nepal Red Cross Society](https://nrcs.org/).
+
+We welcome any feedback and questions. Please email dataanalytics@nesta.org.uk.
 
 <!-- #endregion -->

@@ -37,7 +37,7 @@ The analysis provided in this repository generates two outputs:
 1. A model that predicts item essentialness based on provided household information
 2. A stand alone piece of analysis showing what new items are suggested by households across different demographic features
 
-Find out more about the project in our report (coming soon).
+Find out more about the project in our report [Localising AI for crisis response](https://www.nesta.org.uk/report/localising-ai/).
 
 ## Contents
 
